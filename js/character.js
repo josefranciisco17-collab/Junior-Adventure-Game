@@ -7,6 +7,7 @@
       this.state = "neutral";
       this.blinkTimer = null;
       this.idleTimer = null;
+      this.stateTimer = null;
       this.touchCount = 0;
       this.touchResetTimer = null;
       this.reducedMotion = false;
@@ -39,28 +40,30 @@
 
       const rect = this.element.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height * 0.43;
-      const x = Math.max(-9, Math.min(9, (event.clientX - centerX) / 16));
-      const y = Math.max(-7, Math.min(7, (event.clientY - centerY) / 20));
+      const centerY = rect.top + rect.height * 0.42;
+
+      const x = Math.max(-9, Math.min(9, (event.clientX - centerX) / 17));
+      const y = Math.max(-7, Math.min(7, (event.clientY - centerY) / 21));
 
       this.element.style.setProperty("--gaze-x", `${x}px`);
       this.element.style.setProperty("--gaze-y", `${y}px`);
 
-      const rig = this.element.querySelector(".junior-rig");
+      const rig = this.element.querySelector(".vector-rig");
       if (rig && this.state === "neutral") {
-        rig.style.transform = `translate(${x * 0.16}px, ${y * 0.10}px) rotate(${x * 0.035}deg)`;
+        rig.style.transform = `translate(${x * 0.12}px, ${y * 0.07}px) rotate(${x * 0.025}deg)`;
       }
     }
 
     resetLook() {
       this.element.style.setProperty("--gaze-x", "0px");
       this.element.style.setProperty("--gaze-y", "0px");
-      const rig = this.element.querySelector(".junior-rig");
+
+      const rig = this.element.querySelector(".vector-rig");
       if (rig) rig.style.transform = "";
     }
 
     setState(state, duration = 0) {
-      const valid = [
+      const validStates = [
         "neutral",
         "happy",
         "sad",
@@ -71,11 +74,11 @@
         "sleeping"
       ];
 
-      this.state = valid.includes(state) ? state : "neutral";
+      window.clearTimeout(this.stateTimer);
+      this.state = validStates.includes(state) ? state : "neutral";
       this.element.dataset.state = this.state;
 
       if (duration > 0) {
-        window.clearTimeout(this.stateTimer);
         this.stateTimer = window.setTimeout(() => {
           if (this.state !== "sleeping") this.setState("neutral");
         }, duration);
@@ -84,15 +87,15 @@
 
     handleTouch() {
       if (this.state === "sleeping") {
-        this.setState("surprised", 1200);
+        this.setState("surprised", 1100);
       } else {
         this.touchCount += 1;
 
         if (this.touchCount >= 5) {
-          this.setState("annoyed", 1800);
+          this.setState("annoyed", 1600);
           this.touchCount = 0;
         } else {
-          this.setState("happy", 1100);
+          this.setState("happy", 1050);
         }
       }
 
@@ -103,7 +106,7 @@
       window.clearTimeout(this.touchResetTimer);
       this.touchResetTimer = window.setTimeout(() => {
         this.touchCount = 0;
-      }, 3500);
+      }, 3300);
 
       if (typeof this.onInteract === "function") {
         this.onInteract(this.state);
@@ -113,23 +116,23 @@
     blink() {
       if (this.state === "sleeping") return;
 
-      const close = () => {
+      const closeEyes = () => {
         this.element.classList.add("blink");
         window.setTimeout(() => {
           this.element.classList.remove("blink");
-        }, 105);
+        }, 92);
       };
 
-      close();
+      closeEyes();
 
-      if (Math.random() < 0.18) {
-        window.setTimeout(close, 210);
+      if (Math.random() < 0.16) {
+        window.setTimeout(closeEyes, 205);
       }
     }
 
     scheduleBlink() {
       window.clearTimeout(this.blinkTimer);
-      const delay = 2200 + Math.random() * 4200;
+      const delay = 2600 + Math.random() * 3900;
 
       this.blinkTimer = window.setTimeout(() => {
         this.blink();
@@ -139,15 +142,23 @@
 
     scheduleIdleEmotion() {
       window.clearTimeout(this.idleTimer);
+      const delay = 7600 + Math.random() * 5000;
 
       this.idleTimer = window.setTimeout(() => {
         if (this.state === "neutral") {
-          const states = ["neutral", "neutral", "happy", "surprised"];
-          const next = states[Math.floor(Math.random() * states.length)];
-          this.setState(next, next === "neutral" ? 0 : 1100);
+          const roll = Math.random();
+
+          if (roll < 0.58) {
+            this.setState("neutral");
+          } else if (roll < 0.82) {
+            this.setState("happy", 850);
+          } else {
+            this.setState("surprised", 650);
+          }
         }
+
         this.scheduleIdleEmotion();
-      }, 6500 + Math.random() * 4500);
+      }, delay);
     }
   }
 
