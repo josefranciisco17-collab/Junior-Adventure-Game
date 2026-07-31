@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#101923">
+  <title>Junior Pocket Adventure</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app">
+    <section id="loadingScreen" class="screen active loading-screen">
+      <div class="logo">
+        <strong>JUNIOR</strong>
+        <span>POCKET ADVENTURE</span>
+      </div>
+
+      <div class="loader-junior" aria-hidden="true">
+        <div class="loader-ear left"></div>
+        <div class="loader-ear right"></div>
+        <div class="loader-body"></div>
+      </div>
+
+      <div class="loading-track">
+        <div id="loadingBar" class="loading-fill"></div>
+      </div>
+      <p id="loadingText">Preparando a Junior...</p>
+    </section>
+
+    <section id="menuScreen" class="screen menu-screen">
+      <div class="menu-card">
+        <div class="logo menu-logo">
+          <strong>JUNIOR</strong>
+          <span>POCKET ADVENTURE</span>
+        </div>
+
+        <div class="menu-junior" aria-hidden="true">
+          <div class="menu-ear left"></div>
+          <div class="menu-ear right"></div>
+          <div class="menu-body">
+            <div class="menu-eye left-eye"><i></i></div>
+            <div class="menu-eye right-eye"><i></i></div>
+            <div class="menu-mouth"></div>
+          </div>
+        </div>
+
+        <button id="playBtn" class="btn primary">Jugar</button>
+        <button id="continueBtn" class="btn secondary">Continuar</button>
+        <button id="settingsBtn" class="btn secondary">Ajustes</button>
+        <small>Versión 0.1.0</small>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen living-room">
+      <header class="topbar">
+        <div class="currency"><span class="coin"></span><b id="coins">1250</b></div>
+        <div class="currency"><span class="diamond"></span><b id="diamonds">30</b></div>
+        <button id="backToMenu" class="menu-icon" aria-label="Volver al menú">☰</button>
+      </header>
+
+      <div class="room">
+        <div class="window">
+          <div class="sky"></div>
+          <div class="hill one"></div>
+          <div class="hill two"></div>
+        </div>
+
+        <div class="rug"></div>
+
+        <div id="junior" class="junior" data-state="neutral" tabindex="0" aria-label="Junior">
+          <div class="ear left-ear"></div>
+          <div class="ear right-ear"></div>
+
+          <div class="body">
+            <div class="eye left-eye">
+              <div class="pupil"></div>
+              <div class="eyelid"></div>
+            </div>
+            <div class="eye right-eye">
+              <div class="pupil"></div>
+              <div class="eyelid"></div>
+            </div>
+
+            <div class="brow left-brow"></div>
+            <div class="brow right-brow"></div>
+
+            <div class="muzzle">
+              <div class="nose"></div>
+              <div class="mouth"></div>
+            </div>
+          </div>
+
+          <div class="shadow"></div>
+        </div>
+
+        <div id="message" class="message" hidden></div>
+      </div>
+
+      <section class="needs">
+        <article>
+          <span>Hambre</span>
+          <div class="bar"><i id="hungerBar"></i></div>
+          <b id="hungerText">85%</b>
+        </article>
+        <article>
+          <span>Sueño</span>
+          <div class="bar"><i id="sleepBar"></i></div>
+          <b id="sleepText">70%</b>
+        </article>
+        <article>
+          <span>Higiene</span>
+          <div class="bar"><i id="hygieneBar"></i></div>
+          <b id="hygieneText">80%</b>
+        </article>
+        <article>
+          <span>Felicidad</span>
+          <div class="bar"><i id="happinessBar"></i></div>
+          <b id="happinessText">90%</b>
+        </article>
+      </section>
+
+      <nav class="rooms-nav">
+        <button data-room="living" class="active">Sala</button>
+        <button data-room="kitchen">Cocina</button>
+        <button data-room="bathroom">Baño</button>
+        <button data-room="bedroom">Dormitorio</button>
+      </nav>
+
+      <div class="actions">
+        <button data-action="feed">Dar comida</button>
+        <button data-action="clean">Bañar</button>
+        <button data-action="play">Jugar</button>
+        <button data-action="sleep">Dormir</button>
+      </div>
+    </section>
+
+    <section id="settingsScreen" class="screen settings-screen">
+      <div class="settings-card">
+        <h2>Ajustes</h2>
+        <label><span>Música</span><input id="musicToggle" type="checkbox" checked></label>
+        <label><span>Sonidos</span><input id="soundToggle" type="checkbox" checked></label>
+        <label><span>Movimiento reducido</span><input id="motionToggle" type="checkbox"></label>
+        <button id="settingsBack" class="btn primary">Regresar</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/character.js"></script>
+  <script src="js/game.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

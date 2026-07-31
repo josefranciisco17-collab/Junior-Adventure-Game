@@ -1,0 +1,15 @@
+{
+  "name": "Junior Pocket Adventure",
+  "version": "0.1.0",
+  "character": {
+    "parts": [
+      "body",
+      "eyes",
+      "mouth",
+      "ears"
+    ],
+    "hasArms": false,
+    "hasLegs": false,
+    "hasTail": false
+  }
+}
