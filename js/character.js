@@ -39,19 +39,24 @@
 
       const rect = this.element.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height * 0.42;
-      const x = Math.max(-8, Math.min(8, (event.clientX - centerX) / 18));
-      const y = Math.max(-6, Math.min(6, (event.clientY - centerY) / 22));
+      const centerY = rect.top + rect.height * 0.43;
+      const x = Math.max(-9, Math.min(9, (event.clientX - centerX) / 16));
+      const y = Math.max(-7, Math.min(7, (event.clientY - centerY) / 20));
 
-      const visual = this.element.querySelector(".junior-visual");
-      if (visual && this.state === "neutral") {
-        visual.style.transform = `translate(${x * 0.28}px, ${y * 0.18}px) rotate(${x * 0.08}deg)`;
+      this.element.style.setProperty("--gaze-x", `${x}px`);
+      this.element.style.setProperty("--gaze-y", `${y}px`);
+
+      const rig = this.element.querySelector(".junior-rig");
+      if (rig && this.state === "neutral") {
+        rig.style.transform = `translate(${x * 0.16}px, ${y * 0.10}px) rotate(${x * 0.035}deg)`;
       }
     }
 
     resetLook() {
-      const visual = this.element.querySelector(".junior-visual");
-      if (visual) visual.style.transform = "";
+      this.element.style.setProperty("--gaze-x", "0px");
+      this.element.style.setProperty("--gaze-y", "0px");
+      const rig = this.element.querySelector(".junior-rig");
+      if (rig) rig.style.transform = "";
     }
 
     setState(state, duration = 0) {
@@ -108,10 +113,18 @@
     blink() {
       if (this.state === "sleeping") return;
 
-      this.element.classList.add("blink");
-      window.setTimeout(() => {
-        this.element.classList.remove("blink");
-      }, 150);
+      const close = () => {
+        this.element.classList.add("blink");
+        window.setTimeout(() => {
+          this.element.classList.remove("blink");
+        }, 105);
+      };
+
+      close();
+
+      if (Math.random() < 0.18) {
+        window.setTimeout(close, 210);
+      }
     }
 
     scheduleBlink() {

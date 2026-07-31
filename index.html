@@ -47,7 +47,7 @@
         <button id="playBtn" class="btn primary">Jugar</button>
         <button id="continueBtn" class="btn secondary">Continuar</button>
         <button id="settingsBtn" class="btn secondary">Ajustes</button>
-        <small>Versión 0.2.0</small>
+        <small>Versión 0.3.0</small>
       </div>
     </section>
 
@@ -67,12 +67,24 @@
 
         <div class="rug"></div>
 
-        <div id="junior" class="junior junior-image" data-state="neutral" tabindex="0" aria-label="Junior">
-          <div class="junior-visual">
-            <img class="junior-art" src="assets/images/junior/junior-oficial.png" alt="Junior">
-            <div class="blink-layer blink-left"></div>
-            <div class="blink-layer blink-right"></div>
-            <div class="emotion-shade"></div>
+        <div id="junior" class="junior junior-layered" data-state="neutral" tabindex="0" aria-label="Junior">
+          <div class="junior-rig">
+            <img class="junior-part junior-body" src="assets/images/junior/body-base.png" alt="">
+            <img class="junior-part junior-ear junior-ear-left" src="assets/images/junior/ear-left.png" alt="">
+            <img class="junior-part junior-ear junior-ear-right" src="assets/images/junior/ear-right.png" alt="">
+
+            <div class="face-rig">
+              <div class="layer-eye layer-eye-left">
+                <div class="layer-pupil"><span></span></div>
+                <div class="natural-eyelid"></div>
+              </div>
+              <div class="layer-eye layer-eye-right">
+                <div class="layer-pupil"><span></span></div>
+                <div class="natural-eyelid"></div>
+              </div>
+              <div class="face-brow face-brow-left"></div>
+              <div class="face-brow face-brow-right"></div>
+            </div>
           </div>
           <div class="shadow"></div>
         </div>

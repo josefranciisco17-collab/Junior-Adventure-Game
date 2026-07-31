@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.2.0
+## Versión 0.3.0
 
 Incluye:
 
@@ -44,3 +44,16 @@ http://127.0.0.1:8080
 - Se eliminó el fondo negro de la imagen.
 - El personaje conserva su pecho, pelaje, hocico, ojos y orejas originales.
 - Se añadieron respiración, parpadeo, reacción al tocarlo, sueño, tristeza, sorpresa y movimientos suaves.
+
+
+## Reconstrucción 0.3.0
+
+- Junior ahora está separado por capas.
+- Cuerpo base reconstruido sin los ojos originales.
+- Orejas izquierda y derecha independientes.
+- Ojos, pupilas y párpados nuevos.
+- Parpadeo rápido y natural, con doble parpadeo ocasional.
+- Pupilas que siguen el toque.
+- Orejas con reacciones emocionales.
+- Mejor respiración, rebote, sombra y escala.
+- Sala con más profundidad visual.

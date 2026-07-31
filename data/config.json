@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "character": {
     "parts": [
       "body",
@@ -12,6 +12,16 @@
     "hasLegs": false,
     "hasTail": false,
     "officialImage": "assets/images/junior/junior-oficial.png",
-    "transparentBackground": true
+    "transparentBackground": true,
+    "layered": true,
+    "layers": [
+      "body-base.png",
+      "ear-left.png",
+      "ear-right.png",
+      "CSS eyes",
+      "CSS pupils",
+      "CSS eyelids",
+      "CSS brows"
+    ]
   }
 }
