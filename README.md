@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.4.0
+## Versión 0.5.0
 
 Incluye:
 
@@ -57,3 +57,20 @@ http://127.0.0.1:8080
 - Las expresiones usan cambios pequeños y controlados.
 - No tiene brazos, patas ni cola.
 - La sala recibió más profundidad, mobiliario y mejor integración visual.
+
+
+## Casa Premium 0.5.0
+
+### Sala
+- Sofá, cojines, televisión, mueble, mesa, lámpara, planta, alfombra, reloj, cuadro y ventana animada.
+
+### Cocina
+- Refrigerador, alacenas, fregadero, estufa, horno, microondas, campana, barra, bancos y frutero.
+
+### Baño
+- Regadera de cristal, agua animada, lavabo, espejo iluminado, inodoro, toallero, productos y tapete.
+
+### Dormitorio
+- Cama, almohadas, cobija, buró, lámpara, clóset, planta, alfombra y ventana nocturna.
+
+Las cuatro habitaciones están construidas con objetos independientes y transiciones suaves.

@@ -200,8 +200,15 @@
         bedroom: "Dormitorio"
       };
 
-      this.character.setState("surprised", 800);
-      this.showMessage(`Ahora estás en: ${roomNames[room]}.`);
+      const roomMessages = {
+        living: "La sala está lista para jugar y descansar.",
+        kitchen: "La cocina está preparada para alimentar a Junior.",
+        bathroom: "El baño está listo para mantenerlo limpio.",
+        bedroom: "El dormitorio está preparado para descansar."
+      };
+
+      this.character.setState("surprised", 650);
+      this.showMessage(roomMessages[room] || `Ahora estás en: ${roomNames[room]}.`);
       this.persist();
     }
 

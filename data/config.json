@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -19,5 +19,16 @@
     "hasLegs": false,
     "hasTail": false,
     "rebuiltFromScratch": true
+  },
+  "house": {
+    "premiumRooms": true,
+    "rooms": [
+      "living",
+      "kitchen",
+      "bathroom",
+      "bedroom"
+    ],
+    "transitions": true,
+    "layeredObjects": true
   }
 }

@@ -47,7 +47,7 @@
         <button id="playBtn" class="btn primary">Jugar</button>
         <button id="continueBtn" class="btn secondary">Continuar</button>
         <button id="settingsBtn" class="btn secondary">Ajustes</button>
-        <small>Versión 0.4.0</small>
+        <small>Versión 0.5.0</small>
       </div>
     </section>
 
@@ -59,13 +59,179 @@
       </header>
 
       <div class="room">
-        <div class="window">
-          <div class="sky"></div>
-          <div class="hill one"></div>
-          <div class="hill two"></div>
+        <div class="room-scene living-scene" aria-hidden="true">
+          <div class="wall-panel wall-panel-left"></div>
+          <div class="living-window">
+            <div class="living-sky"></div>
+            <div class="living-cloud living-cloud-one"></div>
+            <div class="living-cloud living-cloud-two"></div>
+            <div class="living-hill living-hill-one"></div>
+            <div class="living-hill living-hill-two"></div>
+            <div class="living-curtain living-curtain-left"></div>
+            <div class="living-curtain living-curtain-right"></div>
+          </div>
+          <div class="living-picture">
+            <span></span>
+          </div>
+          <div class="living-clock">
+            <i></i><b></b>
+          </div>
+          <div class="living-sofa">
+            <div class="living-sofa-back"></div>
+            <div class="living-sofa-seat"></div>
+            <div class="living-cushion living-cushion-left"></div>
+            <div class="living-cushion living-cushion-right"></div>
+          </div>
+          <div class="living-tv-unit">
+            <div class="living-tv-screen">
+              <div class="tv-glow"></div>
+            </div>
+            <div class="living-tv-cabinet"></div>
+          </div>
+          <div class="living-table">
+            <div class="living-table-top"></div>
+            <div class="living-table-leg living-table-leg-left"></div>
+            <div class="living-table-leg living-table-leg-right"></div>
+          </div>
+          <div class="living-lamp">
+            <div class="living-lamp-shade"></div>
+            <div class="living-lamp-post"></div>
+            <div class="living-lamp-base"></div>
+          </div>
+          <div class="living-plant">
+            <div class="plant-leaf leaf-one"></div>
+            <div class="plant-leaf leaf-two"></div>
+            <div class="plant-leaf leaf-three"></div>
+            <div class="plant-pot"></div>
+          </div>
+          <div class="living-rug"></div>
         </div>
 
-        <div class="rug"></div>
+        <div class="room-scene kitchen-scene" aria-hidden="true">
+          <div class="kitchen-wall-tiles"></div>
+          <div class="kitchen-upper kitchen-upper-left"></div>
+          <div class="kitchen-upper kitchen-upper-center"></div>
+          <div class="kitchen-upper kitchen-upper-right"></div>
+          <div class="kitchen-fridge">
+            <div class="fridge-door fridge-door-top"></div>
+            <div class="fridge-door fridge-door-bottom"></div>
+            <div class="fridge-handle fridge-handle-top"></div>
+            <div class="fridge-handle fridge-handle-bottom"></div>
+          </div>
+          <div class="kitchen-counter">
+            <div class="counter-top"></div>
+            <div class="counter-cabinet cabinet-one"></div>
+            <div class="counter-cabinet cabinet-two"></div>
+            <div class="counter-cabinet cabinet-three"></div>
+          </div>
+          <div class="kitchen-sink">
+            <div class="sink-bowl"></div>
+            <div class="sink-faucet"></div>
+          </div>
+          <div class="kitchen-stove">
+            <div class="stove-burner burner-one"></div>
+            <div class="stove-burner burner-two"></div>
+            <div class="stove-oven"></div>
+          </div>
+          <div class="kitchen-microwave">
+            <div class="microwave-window"></div>
+            <div class="microwave-buttons"></div>
+          </div>
+          <div class="kitchen-hood"></div>
+          <div class="kitchen-bar">
+            <div class="bar-top"></div>
+            <div class="bar-base"></div>
+          </div>
+          <div class="kitchen-stool stool-one"></div>
+          <div class="kitchen-stool stool-two"></div>
+          <div class="kitchen-fruit-bowl">
+            <span class="fruit fruit-one"></span>
+            <span class="fruit fruit-two"></span>
+            <span class="fruit fruit-three"></span>
+          </div>
+          <div class="kitchen-floor-grid"></div>
+        </div>
+
+        <div class="room-scene bathroom-scene" aria-hidden="true">
+          <div class="bathroom-wall-tiles"></div>
+          <div class="bathroom-window">
+            <div class="bathroom-window-glass"></div>
+          </div>
+          <div class="bathroom-mirror">
+            <div class="mirror-light mirror-light-left"></div>
+            <div class="mirror-light mirror-light-right"></div>
+          </div>
+          <div class="bathroom-vanity">
+            <div class="vanity-top"></div>
+            <div class="vanity-cabinet"></div>
+            <div class="bathroom-sink"></div>
+            <div class="bathroom-faucet"></div>
+          </div>
+          <div class="bathroom-shower">
+            <div class="shower-glass"></div>
+            <div class="shower-head"></div>
+            <div class="shower-water">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="bathroom-toilet">
+            <div class="toilet-tank"></div>
+            <div class="toilet-seat"></div>
+            <div class="toilet-base"></div>
+          </div>
+          <div class="bathroom-towel-rack">
+            <div class="bathroom-towel"></div>
+          </div>
+          <div class="bathroom-shelf">
+            <span class="bath-bottle bottle-one"></span>
+            <span class="bath-bottle bottle-two"></span>
+            <span class="bath-bottle bottle-three"></span>
+          </div>
+          <div class="bathroom-mat"></div>
+          <div class="bathroom-floor-grid"></div>
+        </div>
+
+        <div class="room-scene bedroom-scene" aria-hidden="true">
+          <div class="bedroom-wall-panel"></div>
+          <div class="bedroom-window">
+            <div class="bedroom-sky"></div>
+            <div class="bedroom-moon"></div>
+            <div class="bedroom-star star-one"></div>
+            <div class="bedroom-star star-two"></div>
+            <div class="bedroom-star star-three"></div>
+            <div class="bedroom-curtain curtain-left"></div>
+            <div class="bedroom-curtain curtain-right"></div>
+          </div>
+          <div class="bedroom-picture"></div>
+          <div class="bedroom-bed">
+            <div class="bed-headboard"></div>
+            <div class="bed-mattress"></div>
+            <div class="bed-blanket"></div>
+            <div class="bed-pillow pillow-left"></div>
+            <div class="bed-pillow pillow-right"></div>
+          </div>
+          <div class="bedroom-nightstand">
+            <div class="nightstand-top"></div>
+            <div class="nightstand-drawer"></div>
+          </div>
+          <div class="bedroom-lamp">
+            <div class="bedroom-lamp-shade"></div>
+            <div class="bedroom-lamp-base"></div>
+          </div>
+          <div class="bedroom-closet">
+            <div class="closet-door closet-door-left"></div>
+            <div class="closet-door closet-door-right"></div>
+            <div class="closet-handle closet-handle-left"></div>
+            <div class="closet-handle closet-handle-right"></div>
+          </div>
+          <div class="bedroom-rug"></div>
+          <div class="bedroom-plant">
+            <div class="bed-leaf bed-leaf-one"></div>
+            <div class="bed-leaf bed-leaf-two"></div>
+            <div class="bed-leaf bed-leaf-three"></div>
+            <div class="bed-pot"></div>
+          </div>
+        </div>
 
         <div id="junior" class="junior junior-vector" data-state="neutral" tabindex="0" aria-label="Junior">
           <svg class="junior-svg" viewBox="0 0 600 650" role="img" aria-label="Junior">
