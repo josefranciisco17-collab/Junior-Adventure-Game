@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.1.0
+## Versión 0.2.0
 
 Incluye:
 
@@ -36,3 +36,11 @@ Después abre:
 ```text
 http://127.0.0.1:8080
 ```
+
+
+## Cambio principal de la versión 0.2.0
+
+- Se sustituyó el personaje genérico de CSS por el diseño oficial de Junior.
+- Se eliminó el fondo negro de la imagen.
+- El personaje conserva su pecho, pelaje, hocico, ojos y orejas originales.
+- Se añadieron respiración, parpadeo, reacción al tocarlo, sueño, tristeza, sorpresa y movimientos suaves.

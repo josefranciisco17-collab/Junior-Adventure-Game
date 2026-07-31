@@ -43,13 +43,15 @@
       const x = Math.max(-8, Math.min(8, (event.clientX - centerX) / 18));
       const y = Math.max(-6, Math.min(6, (event.clientY - centerY) / 22));
 
-      this.element.style.setProperty("--look-x", `${x}px`);
-      this.element.style.setProperty("--look-y", `${y}px`);
+      const visual = this.element.querySelector(".junior-visual");
+      if (visual && this.state === "neutral") {
+        visual.style.transform = `translate(${x * 0.28}px, ${y * 0.18}px) rotate(${x * 0.08}deg)`;
+      }
     }
 
     resetLook() {
-      this.element.style.setProperty("--look-x", "0px");
-      this.element.style.setProperty("--look-y", "0px");
+      const visual = this.element.querySelector(".junior-visual");
+      if (visual) visual.style.transform = "";
     }
 
     setState(state, duration = 0) {

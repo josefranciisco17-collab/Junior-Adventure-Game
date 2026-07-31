@@ -159,3 +159,163 @@ button{border:0;cursor:pointer}
   .needs article{padding:5px}
   .rooms-nav button,.actions button{min-height:36px}
 }
+
+
+/* =========================================================
+   JUNIOR OFICIAL — imagen transparente y animación natural
+   ========================================================= */
+
+.junior.junior-image{
+  --look-x:0px;
+  --look-y:0px;
+  width:clamp(250px,72vw,470px);
+  height:auto;
+  aspect-ratio: 1 / 1.05;
+  left:50%;
+  bottom:5%;
+  transform:translateX(-50%);
+  animation:juniorNaturalBreath 3.8s ease-in-out infinite;
+  transform-origin:50% 86%;
+  touch-action:manipulation;
+}
+
+.junior-image .junior-visual{
+  position:absolute;
+  inset:0;
+  transform-origin:50% 83%;
+  transition:transform .38s cubic-bezier(.2,.8,.2,1),filter .38s ease;
+}
+
+.junior-image .junior-art{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  pointer-events:none;
+  filter:drop-shadow(0 17px 13px rgba(49,27,16,.28));
+}
+
+.junior-image .shadow{
+  width:74%;
+  height:7%;
+  bottom:2%;
+  opacity:.72;
+}
+
+.junior-image .blink-layer{
+  position:absolute;
+  z-index:4;
+  top:27.1%;
+  width:21.3%;
+  height:0;
+  overflow:hidden;
+  border-radius:52%;
+  background:
+    radial-gradient(circle at 50% 88%, #d38a43 0 58%, #b7672c 82%, #7c3d1d 100%);
+  border:0 solid #221713;
+  opacity:0;
+  transition:height .12s ease,opacity .08s ease,border-width .08s ease;
+  pointer-events:none;
+}
+
+.junior-image .blink-left{left:28.1%}
+.junior-image .blink-right{right:28.1%}
+
+.junior-image.blink .blink-layer,
+.junior-image[data-state="sleeping"] .blink-layer{
+  height:20.8%;
+  opacity:1;
+  border-width:3px;
+}
+
+.junior-image .emotion-shade{
+  position:absolute;
+  inset:8% 7% 5%;
+  z-index:3;
+  border-radius:48%;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .35s ease,background .35s ease;
+}
+
+@keyframes juniorNaturalBreath{
+  0%,100%{transform:translateX(-50%) translateY(0) scale(1)}
+  48%{transform:translateX(-50%) translateY(-2px) scale(1.012,.988)}
+  52%{transform:translateX(-50%) translateY(-2px) scale(1.012,.988)}
+}
+
+.junior-image.touch-bounce{
+  animation:juniorImageTouch .58s cubic-bezier(.2,.9,.25,1);
+}
+
+@keyframes juniorImageTouch{
+  0%{transform:translateX(-50%) scale(1)}
+  32%{transform:translateX(-50%) translateY(-8px) scale(1.035,.965)}
+  63%{transform:translateX(-50%) translateY(1px) scale(.985,1.018)}
+  100%{transform:translateX(-50%) scale(1)}
+}
+
+.junior-image[data-state="happy"] .junior-visual{
+  transform:translateY(-5px) scale(1.018);
+}
+
+.junior-image[data-state="surprised"] .junior-visual{
+  transform:translateY(-8px) scale(.985,1.035);
+}
+
+.junior-image[data-state="sad"] .junior-visual{
+  transform:translateY(7px) scale(.99,.975);
+  filter:saturate(.85) brightness(.96);
+}
+
+.junior-image[data-state="sad"] .emotion-shade{
+  opacity:.15;
+  background:linear-gradient(rgba(70,100,150,.1),rgba(55,70,115,.35));
+}
+
+.junior-image[data-state="tired"] .junior-visual{
+  transform:translateY(5px) rotate(-1deg) scale(.995,.98);
+  filter:saturate(.8) brightness(.95);
+}
+
+.junior-image[data-state="hungry"] .junior-visual{
+  animation:juniorHungry 1.5s ease-in-out infinite;
+}
+
+@keyframes juniorHungry{
+  0%,100%{transform:translateX(0)}
+  35%{transform:translateX(-3px) rotate(-.6deg)}
+  70%{transform:translateX(3px) rotate(.6deg)}
+}
+
+.junior-image[data-state="annoyed"] .junior-visual{
+  animation:juniorAnnoyed .22s linear 0s 3;
+  filter:saturate(.92) contrast(1.03);
+}
+
+@keyframes juniorAnnoyed{
+  0%,100%{transform:translateX(0)}
+  50%{transform:translateX(4px)}
+}
+
+.junior-image[data-state="sleeping"]{
+  animation:juniorSleepBreath 5.2s ease-in-out infinite;
+}
+
+.junior-image[data-state="sleeping"] .junior-visual{
+  transform:translateY(9px) scale(1.01,.975);
+  filter:saturate(.78) brightness(.92);
+}
+
+@keyframes juniorSleepBreath{
+  0%,100%{transform:translateX(-50%) scale(1)}
+  50%{transform:translateX(-50%) scale(1.012,.982)}
+}
+
+@media (max-height:700px){
+  .junior.junior-image{
+    width:clamp(220px,61vw,330px);
+    bottom:3%;
+  }
+}
