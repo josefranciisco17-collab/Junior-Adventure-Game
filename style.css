@@ -827,3 +827,88 @@ linear-gradient(90deg,rgba(255,255,255,.14),transparent 35%,transparent 65%,rgba
   .bathroom-shower{width:32%}
   .bedroom-bed{width:39%}
 }
+
+
+/* ==========================================================
+   0.5.1 — JUNIOR OFICIAL EN CARGA Y MENÚ
+   ========================================================== */
+
+.official-junior-preview{
+  position:relative;
+  display:block;
+  flex:0 0 auto;
+  filter:drop-shadow(0 14px 14px rgba(0,0,0,.3));
+}
+
+.official-junior-preview .junior-svg{
+  width:100%;
+  height:100%;
+  display:block;
+  overflow:visible;
+}
+
+.official-junior-preview .vector-rig{
+  transform-origin:300px 560px;
+  animation:previewBreathing 4.4s ease-in-out infinite;
+}
+
+.official-junior-preview .vector-eyelid{
+  transform:translateY(-112px);
+  animation:previewBlink 5.2s infinite;
+}
+
+.official-junior-preview .vector-pupil{
+  animation:previewLook 6.4s ease-in-out infinite;
+}
+
+.official-junior-preview .vector-brow{
+  opacity:0;
+}
+
+.official-junior-preview .vector-shadow{
+  fill:rgba(61,34,18,.24);
+  filter:blur(7px);
+}
+
+.official-junior-loading{
+  width:132px;
+  aspect-ratio:600/650;
+  margin-top:-4px;
+}
+
+.official-junior-menu{
+  width:190px;
+  aspect-ratio:600/650;
+  margin:-12px 0 3px;
+}
+
+@keyframes previewBreathing{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-2px) scale(1.008,.992)}
+}
+
+@keyframes previewBlink{
+  0%,42%,45%,100%{transform:translateY(-112px)}
+  43%,44%{transform:translateY(0)}
+}
+
+@keyframes previewLook{
+  0%,18%,100%{transform:translate(0,0)}
+  32%{transform:translate(6px,1px)}
+  48%{transform:translate(0,0)}
+  66%{transform:translate(-5px,2px)}
+  82%{transform:translate(0,0)}
+}
+
+/* Oculta por completo los dibujos viejos del inicio por si quedan estilos heredados */
+.loader-junior,
+.menu-junior{
+  display:none!important;
+}
+
+@media(max-height:740px){
+  .official-junior-menu{
+    width:165px;
+    margin:-18px 0 -2px;
+  }
+}

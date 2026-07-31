@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.5.0
+## Versión 0.5.1
 
 Incluye:
 
@@ -74,3 +74,12 @@ http://127.0.0.1:8080
 - Cama, almohadas, cobija, buró, lámpara, clóset, planta, alfombra y ventana nocturna.
 
 Las cuatro habitaciones están construidas con objetos independientes y transiciones suaves.
+
+
+## Ajuste 0.5.1
+
+- La pantalla de carga usa al Junior oficial.
+- El menú principal usa exactamente al mismo Junior del juego.
+- Se eliminaron visualmente las versiones simplificadas anteriores.
+- Se conservaron logo, botones, distribución y funciones.
+- Junior respira, parpadea y mueve ligeramente la mirada en el menú.
