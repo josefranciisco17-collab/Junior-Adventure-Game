@@ -23,9 +23,9 @@
         this.musicGain = this.ctx.createGain();
         this.sfxGain = this.ctx.createGain();
 
-        this.master.gain.value = .72;
-        this.musicGain.gain.value = .18;
-        this.sfxGain.gain.value = .62;
+        this.master.gain.value = .95;
+        this.musicGain.gain.value = .22;
+        this.sfxGain.gain.value = .9;
 
         this.musicGain.connect(this.master);
         this.sfxGain.connect(this.master);
@@ -44,7 +44,7 @@
     setEnabled(enabled) {
       this.enabled = Boolean(enabled);
       if (this.master && this.ctx) {
-        const value = this.enabled ? .72 : 0;
+        const value = this.enabled ? .95 : 0;
         this.master.gain.cancelScheduledValues(this.ctx.currentTime);
         this.master.gain.linearRampToValueAtTime(value, this.ctx.currentTime + .08);
       }
@@ -54,7 +54,7 @@
       this.musicEnabled = Boolean(enabled);
       if (this.musicGain && this.ctx) {
         this.musicGain.gain.linearRampToValueAtTime(
-          this.musicEnabled ? .18 : 0,
+          this.musicEnabled ? .22 : 0,
           this.ctx.currentTime + .1
         );
       }
@@ -64,7 +64,7 @@
       this.sfxEnabled = Boolean(enabled);
       if (this.sfxGain && this.ctx) {
         this.sfxGain.gain.linearRampToValueAtTime(
-          this.sfxEnabled ? .62 : 0,
+          this.sfxEnabled ? .9 : 0,
           this.ctx.currentTime + .1
         );
       }
@@ -166,8 +166,12 @@
           window.setTimeout(() => this.noise(.24, .05, 2800), 170);
         },
         sleep: () => {
-          this.tone(392, .35, { volume: .06, endFrequency: 260 });
-          window.setTimeout(() => this.tone(330, .45, { volume: .05, endFrequency: 220 }), 180);
+          this.tone(360, .48, { volume: .13, endFrequency: 210 });
+          window.setTimeout(() => this.tone(285, .62, { volume: .11, endFrequency: 165 }), 210);
+        },
+        snore: () => {
+          this.tone(145, .58, { type: "sine", volume: .16, endFrequency: 92 });
+          window.setTimeout(() => this.noise(.22, .07, 520), 260);
         },
         wake: () => {
           [440, 554, 659].forEach((f, i) => {
@@ -184,6 +188,25 @@
       };
 
       patterns[name]?.();
+    }
+
+    startSnoring() {
+      this.stopSnoring();
+      if (!this.ctx || !this.enabled || !this.sfxEnabled) return;
+
+      const snore = () => {
+        if (!this.snoring) return;
+        this.play("snore");
+        this.snoreTimer = window.setTimeout(snore, 1700);
+      };
+
+      this.snoring = true;
+      snore();
+    }
+
+    stopSnoring() {
+      this.snoring = false;
+      window.clearTimeout(this.snoreTimer);
     }
 
     startAmbient(room) {

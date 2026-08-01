@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.7.0
+## Versión 0.7.1
 
 Incluye:
 
@@ -121,3 +121,15 @@ Las cuatro habitaciones están construidas con objetos independientes y transici
 - HUD más vivo y animaciones visuales adicionales.
 
 Nota: los navegadores móviles exigen tocar la pantalla una vez para permitir el audio.
+
+
+## Corrección 0.7.1
+
+- Al pulsar Dormir, Junior mantiene los ojos completamente cerrados.
+- El juego ya no recarga la habitación después de cada acción.
+- Junior duerme durante 9 segundos antes de despertar.
+- Se añadieron ronquidos repetidos y un sonido de sueño más fuerte.
+- El audio se desbloquea directamente al tocar cualquier acción.
+- La música comienza al pulsar Jugar o Continuar.
+- El botón de sonido queda visible junto al botón del menú.
+- Se incrementó el volumen general de música y efectos.

@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -69,5 +69,13 @@
     "touchHearts": true,
     "sleepZ": true,
     "currencyAnimations": true
+  },
+  "fixes": {
+    "sleepEyesRemainClosed": true,
+    "sleepStateNotInterruptedByRender": true,
+    "audioUnlockOnEveryAction": true,
+    "louderAudio": true,
+    "snoringLoop": true,
+    "soundButtonAlwaysVisible": true
   }
 }

@@ -78,10 +78,15 @@
         this.save.settings.sound = !this.save.settings.sound;
         this.save.settings.music = this.save.settings.sound;
         this.applySettings();
+        if (this.save.settings.sound || this.save.settings.music) {
+          AudioEngine.startAmbient(this.save.room || "living");
+          AudioEngine.play("wake");
+        }
         this.persist();
       });
 
       this.dom.backToMenu.addEventListener("click", () => {
+        AudioEngine.stopSnoring();
         this.persist();
         this.showScreen("menuScreen");
       });
@@ -91,7 +96,10 @@
       });
 
       document.querySelectorAll("[data-action]").forEach((button) => {
-        button.addEventListener("click", () => this.performRoomAction(button.dataset.action));
+        button.addEventListener("click", async () => {
+          await AudioEngine.unlock();
+          this.performRoomAction(button.dataset.action);
+        });
       });
 
       this.dom.musicToggle.addEventListener("change", () => this.updateSettings());
@@ -139,6 +147,7 @@
       this.character.setState("happy", 1400);
       this.showScreen("gameScreen");
       this.startNeedLoop();
+      AudioEngine.startAmbient(this.save.room || "living");
       this.persist();
       this.showMessage("La Casa Viva de Junior está lista.");
     }
@@ -148,6 +157,7 @@
       this.render();
       this.showScreen("gameScreen");
       this.startNeedLoop();
+      AudioEngine.startAmbient(this.save.room || "living");
       this.showMessage("Junior se alegra de verte.");
       this.character.setState("happy", 1400);
     }
@@ -275,7 +285,11 @@
     performRoomAction(actionName) {
       const actions = this.getRoomActions(this.save.room || "living");
       actions?.[actionName]?.[1]?.();
-      this.render();
+
+      // Solo actualiza HUD y economía. No vuelve a cargar el cuarto,
+      // porque eso interrumpía las expresiones y el estado de dormir.
+      this.renderEconomy();
+      this.renderNeeds();
       this.persist();
     }
 
@@ -386,12 +400,20 @@
       this.changeNeed("sleep", 30);
       this.character.setState("sleeping");
       AudioEngine.play("sleep");
+      AudioEngine.startSnoring();
       this.spawnSleepZ();
       this.dom.gameScreen.classList.add("is-night");
-      this.showMessage("Junior está durmiendo.");
-      window.setTimeout(() => {
-        if (this.character.state === "sleeping") this.character.setState("neutral");
-      }, 6500);
+      this.showMessage("Junior cerró los ojos y está durmiendo.");
+
+      window.clearTimeout(this.sleepTimer);
+      this.sleepTimer = window.setTimeout(() => {
+        AudioEngine.stopSnoring();
+        if (this.character.state === "sleeping") {
+          this.character.setState("neutral");
+          AudioEngine.play("wake");
+          this.showMessage("Junior terminó de descansar.");
+        }
+      }, 9000);
     }
 
     toggleNight() {
@@ -404,6 +426,8 @@
     }
 
     wakeJunior() {
+      AudioEngine.stopSnoring();
+      window.clearTimeout(this.sleepTimer);
       this.character.setState("surprised", 900);
       AudioEngine.play("wake");
       this.showMessage("Junior despertó.");
@@ -411,6 +435,7 @@
 
     changeRoom(room) {
       const rooms = ["living", "kitchen", "bathroom", "bedroom"];
+      if (room !== "bedroom") AudioEngine.stopSnoring();
       if (!rooms.includes(room)) return;
 
       this.dom.room?.classList.add("room-changing");
@@ -445,9 +470,30 @@
       }, 180);
     }
 
-    render() {
+    renderEconomy() {
+      const previousCoins = this.dom.coins.textContent;
+      const previousDiamonds = this.dom.diamonds.textContent;
+
       this.dom.coins.textContent = this.save.coins;
       this.dom.diamonds.textContent = this.save.diamonds;
+
+      if (previousCoins !== String(this.save.coins)) {
+        const card = this.dom.coins.closest(".currency");
+        card?.classList.remove("bump");
+        void card?.offsetWidth;
+        card?.classList.add("bump");
+      }
+
+      if (previousDiamonds !== String(this.save.diamonds)) {
+        const card = this.dom.diamonds.closest(".currency");
+        card?.classList.remove("bump");
+        void card?.offsetWidth;
+        card?.classList.add("bump");
+      }
+    }
+
+    render() {
+      this.renderEconomy();
       this.dom.continueBtn.disabled = !GameStorage.hasSave();
       this.dom.continueBtn.style.opacity = GameStorage.hasSave() ? "1" : ".55";
       this.renderNeeds();
