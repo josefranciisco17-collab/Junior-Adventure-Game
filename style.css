@@ -2345,3 +2345,685 @@ body.food-dragging{
     width:92%!important;
   }
 }
+
+
+/* ==========================================================
+   1.0.0 — REFRIGERADOR A PANTALLA COMPLETA
+   ========================================================== */
+
+.fridge-fullscreen{
+  position:fixed;
+  inset:0;
+  z-index:100000;
+  display:none;
+  pointer-events:none;
+}
+
+.fridge-fullscreen.open{
+  display:block;
+  pointer-events:auto;
+}
+
+.fridge-fullscreen-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(5,14,25,.62);
+  backdrop-filter:blur(5px);
+}
+
+.fridge-fullscreen-panel{
+  position:absolute;
+  inset:3.5% 3.5% 4%;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:14px;
+  border:8px solid #aebdc3;
+  border-radius:24px;
+  background:linear-gradient(180deg,#f8fcfd,#d5e8eb);
+  box-shadow:0 28px 60px rgba(0,0,0,.38),inset 0 0 0 4px rgba(255,255,255,.7);
+  overflow:hidden;
+  animation:fridgePanelIn .32s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes fridgePanelIn{
+  from{opacity:0;transform:translateY(18px) scale(.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.fridge-fullscreen-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex:0 0 auto;
+  color:#263d4d;
+}
+
+.fridge-fullscreen-header strong{
+  display:block;
+  font-size:1.35rem;
+}
+
+.fridge-fullscreen-header small{
+  display:block;
+  margin-top:2px;
+  font-size:.7rem;
+  opacity:.72;
+}
+
+.fridge-fullscreen-close{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  color:#fff;
+  font-size:1.4rem;
+  font-weight:900;
+  background:#c45148;
+  box-shadow:inset 0 -4px rgba(0,0,0,.16);
+}
+
+.fridge-categories{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  flex:0 0 auto;
+  padding-bottom:2px;
+  scrollbar-width:none;
+}
+.fridge-categories::-webkit-scrollbar{display:none}
+
+.fridge-categories button{
+  flex:0 0 auto;
+  padding:8px 12px;
+  border-radius:999px;
+  color:#345064;
+  font-size:.66rem;
+  font-weight:900;
+  background:#fff;
+  box-shadow:0 4px 8px rgba(0,0,0,.1);
+}
+
+.fridge-categories button.active{
+  color:#fff;
+  background:linear-gradient(#46a9ee,#247fca);
+}
+
+.fridge-fullscreen-help{
+  margin:0;
+  padding:9px 11px;
+  border-radius:12px;
+  color:#304959;
+  font-size:.7rem;
+  font-weight:800;
+  line-height:1.35;
+  background:rgba(255,255,255,.72);
+}
+
+.fridge-fullscreen-content{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 31%;
+  gap:12px;
+}
+
+.fridge-food-grid{
+  min-height:0;
+  overflow-y:auto;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:11px;
+  padding:4px 4px 10px;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+.fridge-food-card{
+  position:relative;
+  min-height:118px;
+  padding:10px;
+  border-radius:16px;
+  color:#263643;
+  background:rgba(255,255,255,.9);
+  box-shadow:0 7px 14px rgba(0,0,0,.13);
+  touch-action:none!important;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  transition:transform .16s ease,box-shadow .16s ease,opacity .2s ease;
+}
+
+.fridge-food-card *{
+  pointer-events:none;
+}
+
+.fridge-food-card strong{
+  display:block;
+  margin-top:6px;
+  font-size:.76rem;
+}
+
+.fridge-food-card .food-shape{
+  transform:scale(1.05);
+  transform-origin:center;
+}
+
+.fridge-food-card.selected{
+  transform:scale(1.04);
+  outline:4px solid #2f9ce2;
+  outline-offset:2px;
+  box-shadow:0 0 0 6px rgba(47,156,226,.18),0 10px 18px rgba(0,0,0,.18);
+}
+
+.fridge-food-card.selected::before{
+  content:"✓";
+  position:absolute;
+  right:-7px;
+  top:-7px;
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:#fff;
+  font-weight:900;
+  background:#2f9ce2;
+}
+
+.fridge-food-card.drag-source{
+  opacity:.3;
+}
+
+.fridge-food-card.eaten{
+  opacity:.2;
+  filter:grayscale(1);
+}
+
+.fridge-junior-zone{
+  position:relative;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  gap:10px;
+  padding:10px;
+  border-radius:18px;
+  background:linear-gradient(rgba(40,102,139,.12),rgba(255,255,255,.5));
+  box-shadow:inset 0 0 0 2px rgba(74,132,160,.12);
+}
+
+.fridge-mouth-hint{
+  margin:auto 0 0;
+  padding:10px;
+  border-radius:14px;
+  color:#335367;
+  font-size:.72rem;
+  font-weight:900;
+  text-align:center;
+  background:rgba(255,255,255,.76);
+  opacity:.45;
+  transition:opacity .2s ease,transform .2s ease,background .2s ease;
+}
+
+.fridge-mouth-hint.visible{
+  opacity:1;
+}
+
+.fridge-mouth-hint.ready{
+  color:#fff;
+  background:#3ebc63;
+  transform:scale(1.06);
+}
+
+.fridge-feed-button{
+  min-height:48px;
+  padding:10px;
+  border-radius:14px;
+  color:#fff;
+  font-size:.72rem;
+  font-weight:900;
+  background:linear-gradient(#4ac667,#279c46);
+  box-shadow:inset 0 -4px rgba(0,0,0,.15);
+}
+
+.fridge-feed-button:disabled{
+  opacity:.38;
+  filter:grayscale(.7);
+}
+
+.fridge-drag-clone{
+  position:fixed!important;
+  z-index:100001!important;
+  width:108px!important;
+  height:108px!important;
+  pointer-events:none!important;
+  transform:translate(-50%,-50%) scale(1.08)!important;
+  box-shadow:0 22px 34px rgba(0,0,0,.35)!important;
+  opacity:1!important;
+  transition:none!important;
+}
+
+body.fridge-fullscreen-active{
+  overflow:hidden!important;
+  touch-action:none!important;
+}
+
+/* Junior se aparta a la derecha, pero sigue visible y accesible */
+body.fridge-fullscreen-active .game-screen .junior-vector{
+  position:fixed!important;
+  right:2.5%!important;
+  left:auto!important;
+  bottom:12%!important;
+  width:min(34vw,240px)!important;
+  z-index:100001!important;
+  transform:none!important;
+  filter:drop-shadow(0 16px 14px rgba(0,0,0,.35));
+  pointer-events:auto!important;
+}
+
+body.fridge-fullscreen-active .game-screen .junior-vector.food-target-ready{
+  filter:drop-shadow(0 0 18px rgba(58,188,255,.9));
+}
+
+body.fridge-fullscreen-active .game-screen .junior-vector.food-near{
+  transform:scale(1.04)!important;
+}
+
+.food-watermelon .food-shape{
+  width:50px;height:42px;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,#ef4c55 0 58%,#eef0c4 59% 68%,#3d9f4f 69%);
+}
+.food-watermelon .food-shape::after{
+  content:"";position:absolute;inset:9px 11px;
+  background:radial-gradient(circle,#2d231e 0 2px,transparent 3px) 0 0/13px 12px;
+}
+
+.food-steak .food-shape{
+  width:53px;height:39px;border-radius:48% 52% 46% 54%;
+  background:linear-gradient(145deg,#c75d4a,#8f332e);
+  box-shadow:inset 0 0 0 6px #e7a184;
+}
+.food-steak .food-shape::after{
+  content:"";position:absolute;left:18px;top:10px;width:19px;height:16px;border-radius:50%;background:#f0d2b8;
+}
+
+.food-milk .food-shape,
+.food-juice .food-shape{
+  width:34px;height:52px;border-radius:5px;
+  background:linear-gradient(#f7fbff,#cfe1e8);
+  box-shadow:inset 0 0 0 3px #7ea8bb;
+}
+.food-milk .food-shape::before,
+.food-juice .food-shape::before{
+  content:"";position:absolute;left:4px;right:4px;top:-9px;height:12px;border-radius:3px;background:#71a6bd;
+}
+.food-juice .food-shape{background:linear-gradient(#ffd470,#f49c32)}
+.food-juice .food-shape::before{background:#e36d45}
+
+.food-cookie .food-shape{
+  width:48px;height:48px;border-radius:50%;background:#d39b59;
+  box-shadow:
+    inset 0 0 0 3px #b8783d,
+    10px 9px 0 -7px #5b3825,
+    28px 12px 0 -7px #5b3825,
+    18px 29px 0 -7px #5b3825,
+    34px 31px 0 -7px #5b3825,
+    7px 32px 0 -7px #5b3825;
+}
+
+@media(max-width:480px){
+  .fridge-fullscreen-panel{
+    inset:2% 2% 3%;
+    padding:11px;
+  }
+
+  .fridge-fullscreen-content{
+    grid-template-columns:minmax(0,1fr) 34%;
+    gap:8px;
+  }
+
+  .fridge-food-grid{
+    gap:8px;
+  }
+
+  .fridge-food-card{
+    min-height:104px;
+    padding:7px;
+  }
+
+  .fridge-food-card strong{
+    font-size:.66rem;
+  }
+
+  body.fridge-fullscreen-active .game-screen .junior-vector{
+    width:min(32vw,205px)!important;
+    right:1%!important;
+    bottom:14%!important;
+  }
+}
+
+@media(max-height:720px){
+  .fridge-fullscreen-help{
+    font-size:.61rem;
+    padding:7px 9px;
+  }
+
+  .fridge-food-card{
+    min-height:92px;
+  }
+
+  .fridge-fullscreen-header strong{
+    font-size:1.1rem;
+  }
+}
+
+
+/* ==========================================================
+   1.1.0 — REFRIGERADOR VERTICAL REALISTA
+   ========================================================== */
+
+.real-fridge{
+  position:fixed;
+  left:3%;
+  top:16%;
+  bottom:15%;
+  width:min(46vw,310px);
+  z-index:100000;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateX(-30px) scale(.94);
+  transition:opacity .28s ease,visibility .28s ease,transform .36s cubic-bezier(.2,.8,.2,1);
+}
+
+.real-fridge.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translateX(0) scale(1);
+}
+
+.real-fridge-shell{
+  position:absolute;
+  inset:0;
+  border:7px solid #a9b9bf;
+  border-radius:18px;
+  background:linear-gradient(145deg,#edf5f7,#bfcfd4);
+  box-shadow:
+    0 24px 45px rgba(0,0,0,.34),
+    inset 0 0 0 4px rgba(255,255,255,.52);
+  overflow:visible;
+}
+
+.real-fridge-freezer{
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:17%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 12px;
+  border-bottom:5px solid #91a6ad;
+  color:#294151;
+  font-size:.78rem;
+  font-weight:900;
+  background:linear-gradient(#edf5f7,#c8d7db);
+}
+
+.real-fridge-close{
+  width:31px;
+  height:31px;
+  border-radius:50%;
+  color:#fff;
+  font-size:1.15rem;
+  font-weight:900;
+  background:#c9554c;
+  box-shadow:inset 0 -3px rgba(0,0,0,.16);
+}
+
+.real-fridge-interior{
+  position:absolute;
+  left:5%;
+  right:11%;
+  top:20%;
+  bottom:5%;
+  overflow:hidden;
+  border:4px solid #b8c8ce;
+  border-radius:10px;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.32),transparent 24%,transparent 76%,rgba(77,107,117,.08)),
+    linear-gradient(#f8fcfd,#d7e7ea);
+  box-shadow:inset 0 0 18px rgba(93,147,166,.18);
+}
+
+.real-fridge-light{
+  position:absolute;
+  left:50%;
+  top:-12%;
+  width:85%;
+  height:52%;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(255,255,225,.95),rgba(215,241,247,.22) 56%,transparent 72%);
+  pointer-events:none;
+  animation:realFridgeLight 2.8s ease-in-out infinite;
+}
+
+@keyframes realFridgeLight{
+  50%{opacity:.72}
+}
+
+.real-fridge-shelf{
+  position:absolute;
+  left:5%;
+  right:5%;
+  height:5px;
+  border-radius:999px;
+  background:linear-gradient(#ffffff,#8fa5ad);
+  box-shadow:0 3px 4px rgba(0,0,0,.12);
+  z-index:2;
+}
+
+.real-fridge-shelf.shelf-1{top:26%}
+.real-fridge-shelf.shelf-2{top:51%}
+.real-fridge-shelf.shelf-3{top:76%}
+
+.real-fridge-foods{
+  position:absolute;
+  inset:3%;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(4,minmax(0,1fr));
+  gap:8px;
+  z-index:3;
+}
+
+.real-food{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  padding:4px;
+  border:0;
+  border-radius:10px;
+  color:#263643;
+  background:rgba(255,255,255,.78);
+  box-shadow:0 4px 8px rgba(0,0,0,.11);
+  touch-action:none!important;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  transition:transform .15s ease,opacity .2s ease,box-shadow .18s ease;
+  animation:foodIdle 3.2s ease-in-out infinite;
+}
+
+.real-food:nth-child(even){
+  animation-delay:-1.4s;
+}
+
+@keyframes foodIdle{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-2px)}
+}
+
+.real-food *{
+  pointer-events:none;
+}
+
+.real-food .food-shape{
+  transform:scale(.72);
+  transform-origin:center;
+  margin:-3px auto -4px;
+}
+
+.real-food small{
+  display:block;
+  font-size:.48rem;
+  font-weight:900;
+}
+
+.real-food.drag-source{
+  opacity:.25;
+  outline:3px dashed rgba(45,156,224,.55);
+}
+
+.real-food.eaten{
+  opacity:.2;
+  filter:grayscale(1);
+}
+
+.real-fridge-door{
+  position:absolute;
+  left:96%;
+  top:16%;
+  width:42%;
+  height:79%;
+  transform-origin:left center;
+  transform:perspective(650px) rotateY(-63deg);
+  border:7px solid #a9b9bf;
+  border-left-width:10px;
+  border-radius:0 17px 17px 0;
+  background:linear-gradient(110deg,#e8f0f2,#bacbd0);
+  box-shadow:14px 14px 22px rgba(0,0,0,.22);
+  animation:fridgeDoorOpen .42s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes fridgeDoorOpen{
+  from{transform:perspective(650px) rotateY(0)}
+  to{transform:perspective(650px) rotateY(-63deg)}
+}
+
+.real-fridge-door-depth{
+  position:absolute;
+  left:4%;
+  top:5%;
+  bottom:5%;
+  width:15%;
+  border-radius:7px;
+  background:rgba(101,125,134,.18);
+}
+
+.real-fridge-door-handle{
+  position:absolute;
+  left:13%;
+  top:20%;
+  width:7px;
+  height:34%;
+  border-radius:999px;
+  background:#7d9198;
+}
+
+.real-food-drag-clone{
+  position:fixed!important;
+  z-index:100001!important;
+  width:96px!important;
+  height:96px!important;
+  pointer-events:none!important;
+  transform:translate(-50%,-50%) scale(1.08)!important;
+  box-shadow:0 20px 32px rgba(0,0,0,.34)!important;
+  opacity:1!important;
+  transition:none;
+}
+
+body.real-fridge-active{
+  overflow:hidden!important;
+  touch-action:none!important;
+}
+
+body.real-fridge-active::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:99998;
+  pointer-events:none;
+  background:rgba(9,18,29,.3);
+  backdrop-filter:blur(2px);
+}
+
+/* Junior se aparta a la derecha sin desaparecer */
+body.real-fridge-active .game-screen .junior-vector{
+  position:fixed!important;
+  left:auto!important;
+  right:3%!important;
+  bottom:15%!important;
+  width:min(42vw,300px)!important;
+  z-index:100000!important;
+  transform:none!important;
+  pointer-events:none!important;
+  filter:drop-shadow(0 16px 13px rgba(0,0,0,.35));
+}
+
+body.real-fridge-active .game-screen .junior-vector.food-near{
+  transform:scale(1.04)!important;
+}
+
+body.real-fridge-active .game-screen .junior-vector.food-near .open-mouth{
+  opacity:1!important;
+  rx:36px!important;
+  ry:31px!important;
+}
+
+body.real-fridge-active .game-screen .topbar,
+body.real-fridge-active .game-screen .needs,
+body.real-fridge-active .game-screen .rooms-nav,
+body.real-fridge-active .game-screen .actions{
+  pointer-events:none;
+  filter:brightness(.75);
+}
+
+@media(max-width:430px){
+  .real-fridge{
+    left:2%;
+    top:15%;
+    bottom:17%;
+    width:48vw;
+  }
+
+  body.real-fridge-active .game-screen .junior-vector{
+    right:1%!important;
+    width:42vw!important;
+  }
+
+  .real-food small{
+    font-size:.43rem;
+  }
+
+  .real-food .food-shape{
+    transform:scale(.65);
+  }
+}
+
+@media(max-height:720px){
+  .real-fridge{
+    top:12%;
+    bottom:19%;
+  }
+
+  .real-fridge-freezer{
+    font-size:.67rem;
+  }
+
+  .real-food .food-shape{
+    transform:scale(.6);
+  }
+}

@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.9.1
+## Versión 1.1.0
 
 Incluye:
 
@@ -223,3 +223,31 @@ El refrigerador fue retirado de `game.js` y reconstruido como módulo independie
 - La lista de alimentos tiene desplazamiento vertical.
 - Todos los alimentos y el botón para dárselos a Junior quedan accesibles.
 - Se adapta a pantallas móviles bajas y estrechas.
+
+
+## Cocina 1.0 — Refrigerador de pantalla completa
+
+- El refrigerador ocupa casi toda la pantalla.
+- Junior se mueve al lado derecho para no tapar los alimentos.
+- Categorías: Todo, Frutas, Carnes, Bebidas, Postres y Snacks.
+- Alimentos grandes y visibles.
+- Primer toque selecciona.
+- Segundo toque permite arrastrar.
+- También se puede tocar a Junior o usar el botón “Dársela a Junior”.
+- Junior mira la comida, abre la boca, mastica, salta y muestra felicidad.
+- Sonidos de abrir, cerrar, mordida y celebración.
+- Diseño optimizado para Android.
+
+
+## Refrigerador vertical 1.1.0
+
+- Refrigerador alto, angosto y con forma real.
+- Ubicado a la izquierda de la cocina.
+- Puerta animada con profundidad y sombra.
+- Congelador superior, luz interior y estantes.
+- Junior permanece visible a la derecha.
+- Se eliminó completamente el botón “Dársela a Junior”.
+- Un solo toque sostenido inicia el arrastre.
+- Junior sigue la comida, abre la boca y reacciona.
+- Si la comida se suelta fuera de su boca, vuelve automáticamente a su estante.
+- Si acierta, Junior mastica, aumenta hambre/felicidad y salta de emoción.

@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.9.1",
+  "version": "1.1.0",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -128,5 +128,33 @@
     "scrollableFoodGrid": true,
     "backdrop": true,
     "alwaysAboveJunior": true
+  },
+  "fridgeV1": {
+    "fullscreen": true,
+    "juniorMovesAside": true,
+    "categories": [
+      "all",
+      "fruit",
+      "meat",
+      "drink",
+      "dessert",
+      "snack"
+    ],
+    "dragWithinOverlay": true,
+    "tapJuniorFallback": true,
+    "feedButtonFallback": true,
+    "largeTouchTargets": true
+  },
+  "realFridge": {
+    "verticalShape": true,
+    "leftSide": true,
+    "compactSize": true,
+    "animatedDoor": true,
+    "internalLight": true,
+    "glassShelves": true,
+    "dragOnly": true,
+    "noFeedButton": true,
+    "returnToShelfOnMiss": true,
+    "juniorMovesRight": true
   }
 }
