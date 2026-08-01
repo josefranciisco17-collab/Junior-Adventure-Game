@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -61,6 +61,13 @@
       "wake",
       "yawn",
       "pet"
+    ],
+    "louderSfx": true,
+    "addedEffects": [
+      "pickupFood",
+      "chew",
+      "swallow",
+      "foodHappy"
     ]
   },
   "visualPolish": {
@@ -156,5 +163,14 @@
     "noFeedButton": true,
     "returnToShelfOnMiss": true,
     "juniorMovesRight": true
+  },
+  "compactFridge": {
+    "widthPercentApprox": 38,
+    "cardsRemoved": true,
+    "onlyFoodVisible": true,
+    "interiorLedLight": true,
+    "juniorFullyVisible": true,
+    "dragOnly": true,
+    "returnToShelfOnMiss": true
   }
 }

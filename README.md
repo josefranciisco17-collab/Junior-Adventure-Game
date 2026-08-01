@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 1.1.0
+## Versión 1.2.0
 
 Incluye:
 
@@ -251,3 +251,16 @@ El refrigerador fue retirado de `game.js` y reconstruido como módulo independie
 - Junior sigue la comida, abre la boca y reacciona.
 - Si la comida se suelta fuera de su boca, vuelve automáticamente a su estante.
 - Si acierta, Junior mastica, aumenta hambre/felicidad y salta de emoción.
+
+
+## Refrigerador compacto 1.2.0
+
+- Refrigerador aproximadamente 30% más compacto.
+- Junior queda completamente visible a la derecha.
+- Se eliminaron los fondos de las tarjetas.
+- Solo se muestran los alimentos sobre los estantes.
+- Luz LED interior visible al abrir.
+- Puerta más delgada.
+- Sonidos de abrir, cerrar, tomar comida, morder, masticar, tragar y celebrar.
+- Efectos de sonido con mayor volumen.
+- Si la comida no llega a la boca, regresa a su estante.

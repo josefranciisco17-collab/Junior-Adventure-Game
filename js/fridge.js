@@ -116,7 +116,7 @@
       AudioEngine.unlock();
       AudioEngine.play("fridgeOpen");
 
-      this.fridge.classList.add("open");
+      this.fridge.classList.add("open", "light-on");
       this.fridge.setAttribute("aria-hidden", "false");
       document.body.classList.add("real-fridge-active");
       this.gameScreen.classList.add("real-fridge-open");
@@ -130,7 +130,7 @@
 
       this.cancelDrag(true);
 
-      this.fridge.classList.remove("open");
+      this.fridge.classList.remove("open", "light-on");
       this.fridge.setAttribute("aria-hidden", "true");
       document.body.classList.remove("real-fridge-active");
       this.gameScreen.classList.remove("real-fridge-open");
@@ -155,7 +155,7 @@
       this.dragClone.classList.add("real-food-drag-clone");
       document.body.appendChild(this.dragClone);
 
-      AudioEngine.play("tap");
+      AudioEngine.play("pickupFood");
 
       try {
         food.setPointerCapture?.(event.pointerId);
@@ -279,6 +279,14 @@
       AudioEngine.play("bite");
 
       window.setTimeout(() => {
+        AudioEngine.play("chew");
+      }, 170);
+
+      window.setTimeout(() => {
+        AudioEngine.play("swallow");
+      }, 520);
+
+      window.setTimeout(() => {
         this.game.changeNeed("hunger", hunger);
         this.game.changeNeed("happiness", 9);
         this.game.renderNeeds();
@@ -288,7 +296,7 @@
         this.character.element.classList.add("food-celebration");
         this.character.setState("happy", 1700);
 
-        AudioEngine.play("happy");
+        AudioEngine.play("foodHappy");
         this.game.spawnStars(12);
         this.game.spawnHearts(7);
         this.game.showMessage(`Junior disfrutó ${name}.`);

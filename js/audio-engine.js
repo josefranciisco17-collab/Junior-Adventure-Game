@@ -23,9 +23,9 @@
         this.musicGain = this.ctx.createGain();
         this.sfxGain = this.ctx.createGain();
 
-        this.master.gain.value = .95;
-        this.musicGain.gain.value = .22;
-        this.sfxGain.gain.value = .9;
+        this.master.gain.value = 1.0;
+        this.musicGain.gain.value = .16;
+        this.sfxGain.gain.value = 1.0;
 
         this.musicGain.connect(this.master);
         this.sfxGain.connect(this.master);
@@ -44,7 +44,7 @@
     setEnabled(enabled) {
       this.enabled = Boolean(enabled);
       if (this.master && this.ctx) {
-        const value = this.enabled ? .95 : 0;
+        const value = this.enabled ? 1.0 : 0;
         this.master.gain.cancelScheduledValues(this.ctx.currentTime);
         this.master.gain.linearRampToValueAtTime(value, this.ctx.currentTime + .08);
       }
@@ -54,7 +54,7 @@
       this.musicEnabled = Boolean(enabled);
       if (this.musicGain && this.ctx) {
         this.musicGain.gain.linearRampToValueAtTime(
-          this.musicEnabled ? .22 : 0,
+          this.musicEnabled ? .16 : 0,
           this.ctx.currentTime + .1
         );
       }
@@ -64,7 +64,7 @@
       this.sfxEnabled = Boolean(enabled);
       if (this.sfxGain && this.ctx) {
         this.sfxGain.gain.linearRampToValueAtTime(
-          this.sfxEnabled ? .9 : 0,
+          this.sfxEnabled ? 1.0 : 0,
           this.ctx.currentTime + .1
         );
       }
@@ -186,16 +186,36 @@
           window.setTimeout(() => this.tone(780, .15, { volume: .07 }), 80);
         },
         fridgeOpen: () => {
-          this.tone(190, .18, { type: "triangle", volume: .13, endFrequency: 260 });
-          window.setTimeout(() => this.tone(480, .12, { volume: .08 }), 120);
+          this.tone(155, .22, { type: "triangle", volume: .28, endFrequency: 245 });
+          window.setTimeout(() => this.noise(.18, .14, 950), 70);
+          window.setTimeout(() => this.tone(620, .16, { volume: .16 }), 150);
         },
         fridgeClose: () => {
-          this.tone(230, .16, { type: "triangle", volume: .11, endFrequency: 150 });
+          this.tone(250, .17, { type: "triangle", volume: .24, endFrequency: 125 });
+          window.setTimeout(() => this.noise(.12, .13, 700), 70);
+        },
+        pickupFood: () => {
+          this.tone(760, .09, { volume: .20, endFrequency: 980 });
+          window.setTimeout(() => this.tone(1060, .10, { volume: .16 }), 55);
         },
         bite: () => {
-          this.noise(.14, .13, 1150);
-          window.setTimeout(() => this.noise(.11, .11, 900), 150);
-          window.setTimeout(() => this.noise(.1, .1, 760), 295);
+          this.noise(.15, .22, 1250);
+          window.setTimeout(() => this.noise(.12, .20, 920), 145);
+          window.setTimeout(() => this.noise(.11, .18, 760), 290);
+        },
+        chew: () => {
+          this.noise(.10, .18, 860);
+          window.setTimeout(() => this.noise(.10, .16, 740), 125);
+          window.setTimeout(() => this.noise(.09, .15, 650), 250);
+        },
+        swallow: () => {
+          this.tone(330, .24, { volume: .18, endFrequency: 170 });
+          window.setTimeout(() => this.tone(190, .20, { volume: .14, endFrequency: 105 }), 130);
+        },
+        foodHappy: () => {
+          [659, 784, 988].forEach((f, i) => {
+            window.setTimeout(() => this.tone(f, .14, { volume: .18 }), i * 70);
+          });
         }
       };
 

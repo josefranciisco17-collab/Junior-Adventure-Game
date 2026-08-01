@@ -3027,3 +3027,229 @@ body.real-fridge-active .game-screen .actions{
     transform:scale(.6);
   }
 }
+
+
+/* ==========================================================
+   1.2.0 — REFRIGERADOR COMPACTO, LIMPIO Y MÁS REALISTA
+   ========================================================== */
+
+.real-fridge{
+  left:3%!important;
+  top:20%!important;
+  bottom:19%!important;
+  width:min(38vw,250px)!important;
+  z-index:100000!important;
+}
+
+.real-fridge-shell{
+  border-width:6px!important;
+  border-radius:16px!important;
+}
+
+.real-fridge-freezer{
+  height:16%!important;
+  padding:0 9px!important;
+  font-size:.68rem!important;
+}
+
+.real-fridge-close{
+  width:28px!important;
+  height:28px!important;
+  font-size:1rem!important;
+}
+
+.real-fridge-interior{
+  left:6%!important;
+  right:10%!important;
+  top:19%!important;
+  bottom:5%!important;
+  border-width:3px!important;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.42),transparent 24%,transparent 76%,rgba(75,105,116,.08)),
+    linear-gradient(#fbfeff,#d9edf1)!important;
+  box-shadow:
+    inset 0 0 20px rgba(111,194,224,.22),
+    inset 0 0 0 1px rgba(255,255,255,.65)!important;
+}
+
+.real-fridge-light{
+  left:50%!important;
+  top:-8%!important;
+  width:92%!important;
+  height:60%!important;
+  opacity:0!important;
+  background:
+    radial-gradient(
+      ellipse at 50% 20%,
+      rgba(255,255,238,1) 0 16%,
+      rgba(235,251,255,.92) 17% 40%,
+      rgba(178,230,247,.28) 62%,
+      transparent 76%
+    )!important;
+  filter:drop-shadow(0 0 12px rgba(223,248,255,.8));
+  transition:opacity .25s ease;
+  animation:none!important;
+}
+
+.real-fridge.light-on .real-fridge-light{
+  opacity:1!important;
+  animation:fridgeLightPulse 2.6s ease-in-out infinite!important;
+}
+
+@keyframes fridgeLightPulse{
+  0%,100%{filter:drop-shadow(0 0 10px rgba(223,248,255,.75))}
+  50%{filter:drop-shadow(0 0 17px rgba(255,255,235,.95))}
+}
+
+.real-fridge-shelf{
+  left:4%!important;
+  right:4%!important;
+  height:4px!important;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,.95),
+      rgba(185,222,233,.72) 55%,
+      rgba(89,132,146,.45)
+    )!important;
+  box-shadow:
+    0 3px 4px rgba(0,0,0,.10),
+    inset 0 1px rgba(255,255,255,.8)!important;
+}
+
+.real-fridge-foods{
+  inset:2.5%!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-rows:repeat(4,minmax(0,1fr))!important;
+  gap:5px!important;
+}
+
+/* Sin fondo de tarjeta: solo alimento y nombre pequeño */
+.real-food{
+  padding:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  animation:foodIdle 3s ease-in-out infinite!important;
+}
+
+.real-food:hover,
+.real-food:focus,
+.real-food:active{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+.real-food .food-shape{
+  transform:scale(.74)!important;
+  margin:0 auto -5px!important;
+  filter:drop-shadow(0 4px 3px rgba(0,0,0,.18));
+}
+
+.real-food small{
+  display:block!important;
+  margin-top:0!important;
+  color:#314753!important;
+  font-size:.42rem!important;
+  font-weight:900!important;
+  text-shadow:0 1px rgba(255,255,255,.9);
+}
+
+.real-food.drag-source{
+  opacity:.22!important;
+  outline:none!important;
+}
+
+.real-food.eaten{
+  opacity:.15!important;
+}
+
+/* Puerta más delgada y compacta */
+.real-fridge-door{
+  left:95%!important;
+  top:15%!important;
+  width:32%!important;
+  height:80%!important;
+  border-width:6px!important;
+  border-left-width:8px!important;
+  transform:perspective(650px) rotateY(-66deg)!important;
+}
+
+.real-fridge-door-handle{
+  left:16%!important;
+  width:6px!important;
+}
+
+/* Junior totalmente visible a la derecha */
+body.real-fridge-active .game-screen .junior-vector{
+  right:1.5%!important;
+  bottom:20%!important;
+  width:min(43vw,305px)!important;
+  filter:none!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+
+body.real-fridge-active::before{
+  background:rgba(9,18,29,.18)!important;
+  backdrop-filter:blur(1px)!important;
+}
+
+body.real-fridge-active .game-screen .junior-vector.food-near{
+  transform:scale(1.045)!important;
+  filter:drop-shadow(0 0 14px rgba(67,189,255,.75))!important;
+}
+
+body.real-fridge-active .game-screen .junior-vector.food-near .open-mouth{
+  opacity:1!important;
+  rx:37px!important;
+  ry:32px!important;
+}
+
+.real-food-drag-clone{
+  width:88px!important;
+  height:88px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 14px 10px rgba(0,0,0,.32));
+}
+
+@media(max-width:430px){
+  .real-fridge{
+    left:2%!important;
+    top:19%!important;
+    bottom:21%!important;
+    width:38vw!important;
+  }
+
+  body.real-fridge-active .game-screen .junior-vector{
+    right:0!important;
+    bottom:21%!important;
+    width:44vw!important;
+  }
+
+  .real-food .food-shape{
+    transform:scale(.64)!important;
+  }
+
+  .real-food small{
+    font-size:.37rem!important;
+  }
+}
+
+@media(max-height:720px){
+  .real-fridge{
+    top:17%!important;
+    bottom:22%!important;
+  }
+
+  .real-food .food-shape{
+    transform:scale(.57)!important;
+  }
+
+  body.real-fridge-active .game-screen .junior-vector{
+    bottom:22%!important;
+    width:40vw!important;
+  }
+}
