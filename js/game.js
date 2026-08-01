@@ -110,7 +110,25 @@
       this.dom.closeFridge?.addEventListener("click", () => this.closeFridge());
 
       document.querySelectorAll(".food-item").forEach((item) => {
-        item.addEventListener("pointerdown", (event) => this.startFoodDrag(event, item));
+        item.addEventListener("pointerdown", (event) => {
+          this.startFoodDrag(event, item);
+        }, { passive: false });
+
+        // Respaldo para navegadores Android que manejan mal pointer events.
+        item.addEventListener("touchstart", (event) => {
+          if (this.draggedFood) return;
+          const touch = event.touches[0];
+          if (!touch) return;
+          event.preventDefault();
+
+          this.startFoodDrag({
+            pointerId: touch.identifier,
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+            preventDefault: () => event.preventDefault(),
+            currentTarget: item
+          }, item, true);
+        }, { passive: false });
       });
 
       document.querySelectorAll("[data-action]").forEach((button) => {
@@ -331,12 +349,14 @@
       if (playSound) AudioEngine.play("fridgeClose");
     }
 
-    startFoodDrag(event, item) {
+    startFoodDrag(event, item, touchFallback = false) {
       if ((this.save.room || "living") !== "kitchen") return;
       if (!this.dom.gameScreen.classList.contains("fridge-open")) return;
       if (item.classList.contains("food-used")) return;
+      if (this.draggedFood) return;
 
-      event.preventDefault();
+      event.preventDefault?.();
+
       this.draggedFood = item;
       this.dragPointerId = event.pointerId;
       this.foodOrigin = {
@@ -344,65 +364,144 @@
         next: item.nextElementSibling
       };
 
-      item.setPointerCapture?.(event.pointerId);
+      const rect = item.getBoundingClientRect();
+      this.dragOffsetX = event.clientX - rect.left;
+      this.dragOffsetY = event.clientY - rect.top;
+
+      document.body.classList.add("food-dragging");
       item.classList.add("dragging");
       document.body.appendChild(item);
+
+      this.showDragHint();
       this.moveFood(event);
 
-      const move = (moveEvent) => {
-        if (moveEvent.pointerId !== this.dragPointerId) return;
+      if (!touchFallback) {
+        try {
+          item.setPointerCapture?.(event.pointerId);
+        } catch (error) {
+          console.warn("No se pudo capturar el puntero:", error);
+        }
+      }
+
+      const pointerMove = (moveEvent) => {
+        if (this.dragPointerId !== null && moveEvent.pointerId !== this.dragPointerId) return;
+        moveEvent.preventDefault?.();
         this.moveFood(moveEvent);
       };
 
-      const end = (endEvent) => {
-        if (endEvent.pointerId !== this.dragPointerId) return;
-        window.removeEventListener("pointermove", move);
-        window.removeEventListener("pointerup", end);
-        window.removeEventListener("pointercancel", end);
+      const pointerEnd = (endEvent) => {
+        if (this.dragPointerId !== null && endEvent.pointerId !== this.dragPointerId) return;
+        this.removeDragListeners();
         this.finishFoodDrag(endEvent);
       };
 
-      window.addEventListener("pointermove", move, { passive: false });
-      window.addEventListener("pointerup", end);
-      window.addEventListener("pointercancel", end);
+      const touchMove = (touchEvent) => {
+        if (!this.draggedFood) return;
+        const touch = [...touchEvent.touches].find(
+          (value) => value.identifier === this.dragPointerId
+        ) || touchEvent.touches[0];
+
+        if (!touch) return;
+        touchEvent.preventDefault();
+
+        this.moveFood({
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+          preventDefault: () => touchEvent.preventDefault()
+        });
+      };
+
+      const touchEnd = (touchEvent) => {
+        if (!this.draggedFood) return;
+        const touch = [...touchEvent.changedTouches].find(
+          (value) => value.identifier === this.dragPointerId
+        ) || touchEvent.changedTouches[0];
+
+        this.removeDragListeners();
+        this.finishFoodDrag({
+          clientX: touch?.clientX ?? this.lastDragX,
+          clientY: touch?.clientY ?? this.lastDragY
+        });
+      };
+
+      this.activeDragHandlers = {
+        pointerMove,
+        pointerEnd,
+        touchMove,
+        touchEnd
+      };
+
+      window.addEventListener("pointermove", pointerMove, { passive: false });
+      window.addEventListener("pointerup", pointerEnd, { passive: false });
+      window.addEventListener("pointercancel", pointerEnd, { passive: false });
+      window.addEventListener("touchmove", touchMove, { passive: false });
+      window.addEventListener("touchend", touchEnd, { passive: false });
+      window.addEventListener("touchcancel", touchEnd, { passive: false });
+    }
+
+    removeDragListeners() {
+      const handlers = this.activeDragHandlers;
+      if (!handlers) return;
+
+      window.removeEventListener("pointermove", handlers.pointerMove);
+      window.removeEventListener("pointerup", handlers.pointerEnd);
+      window.removeEventListener("pointercancel", handlers.pointerEnd);
+      window.removeEventListener("touchmove", handlers.touchMove);
+      window.removeEventListener("touchend", handlers.touchEnd);
+      window.removeEventListener("touchcancel", handlers.touchEnd);
+
+      this.activeDragHandlers = null;
     }
 
     moveFood(event) {
       if (!this.draggedFood) return;
       event.preventDefault?.();
 
-      this.draggedFood.style.left = `${event.clientX}px`;
-      this.draggedFood.style.top = `${event.clientY}px`;
+      const x = Number(event.clientX);
+      const y = Number(event.clientY);
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+
+      this.lastDragX = x;
+      this.lastDragY = y;
+
+      this.draggedFood.style.left = `${x}px`;
+      this.draggedFood.style.top = `${y}px`;
 
       const juniorRect = this.character.element.getBoundingClientRect();
       const mouthX = juniorRect.left + juniorRect.width * .5;
       const mouthY = juniorRect.top + juniorRect.height * .625;
-      const distance = Math.hypot(event.clientX - mouthX, event.clientY - mouthY);
+      const distance = Math.hypot(x - mouthX, y - mouthY);
 
-      this.character.element.classList.toggle("food-near", distance < 115);
+      this.character.element.classList.toggle("food-near", distance < 125);
 
-      const dx = Math.max(-9, Math.min(9, (event.clientX - mouthX) / 18));
-      const dy = Math.max(-7, Math.min(7, (event.clientY - mouthY) / 22));
+      const dx = Math.max(-9, Math.min(9, (x - mouthX) / 18));
+      const dy = Math.max(-7, Math.min(7, (y - mouthY) / 22));
       this.character.element.style.setProperty("--gaze-x", `${dx}px`);
       this.character.element.style.setProperty("--gaze-y", `${dy}px`);
 
-      if (Math.random() < .32) this.spawnFoodTrail(event.clientX, event.clientY);
+      if (Math.random() < .28) this.spawnFoodTrail(x, y);
     }
 
     finishFoodDrag(event) {
       if (!this.draggedFood) return;
 
       const item = this.draggedFood;
+      const x = Number(event.clientX ?? this.lastDragX);
+      const y = Number(event.clientY ?? this.lastDragY);
+
       const juniorRect = this.character.element.getBoundingClientRect();
       const mouthX = juniorRect.left + juniorRect.width * .5;
       const mouthY = juniorRect.top + juniorRect.height * .625;
-      const distance = Math.hypot(event.clientX - mouthX, event.clientY - mouthY);
+      const distance = Math.hypot(x - mouthX, y - mouthY);
+
+      document.body.classList.remove("food-dragging");
+      this.hideDragHint();
 
       this.character.element.classList.remove("food-near");
       this.character.element.style.setProperty("--gaze-x", "0px");
       this.character.element.style.setProperty("--gaze-y", "0px");
 
-      if (distance < 105) {
+      if (distance < 125) {
         this.feedDraggedFood(item);
       } else {
         this.restoreFood(item);
@@ -410,13 +509,15 @@
 
       this.draggedFood = null;
       this.dragPointerId = null;
+      this.lastDragX = null;
+      this.lastDragY = null;
     }
 
     restoreFood(item) {
       item.classList.remove("dragging");
       item.removeAttribute("style");
 
-      if (this.foodOrigin?.next) {
+      if (this.foodOrigin?.next && this.foodOrigin.next.parentElement === this.foodOrigin.parent) {
         this.foodOrigin.parent.insertBefore(item, this.foodOrigin.next);
       } else {
         this.foodOrigin?.parent?.appendChild(item);
@@ -428,10 +529,12 @@
       const name = item.dataset.name || "comida";
 
       item.classList.remove("dragging");
+      item.style.position = "fixed";
       item.style.left = "50%";
-      item.style.top = "62%";
-      item.style.transition = "transform .22s ease,opacity .22s ease";
-      item.style.transform = "translate(-50%,-50%) scale(.45)";
+      item.style.top = "56%";
+      item.style.zIndex = "9999";
+      item.style.transition = "transform .24s ease,opacity .24s ease";
+      item.style.transform = "translate(-50%,-50%) scale(.35)";
       item.style.opacity = "0";
 
       this.character.element.classList.add("eating");
@@ -462,6 +565,20 @@
           item.classList.remove("food-used");
         }, 7000);
       }, 700);
+    }
+
+    showDragHint() {
+      this.hideDragHint();
+      const hint = document.createElement("div");
+      hint.className = "food-drag-hint";
+      hint.textContent = "Lleva la comida hasta la boca de Junior";
+      document.body.appendChild(hint);
+      this.dragHint = hint;
+    }
+
+    hideDragHint() {
+      this.dragHint?.remove();
+      this.dragHint = null;
     }
 
     spawnFoodTrail(x, y) {

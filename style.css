@@ -1779,3 +1779,73 @@ linear-gradient(90deg,rgba(255,255,255,.14),transparent 35%,transparent 65%,rgba
     width:38%;
   }
 }
+
+
+/* ==========================================================
+   0.8.1 — ARRASTRE TÁCTIL CORREGIDO EN ANDROID
+   ========================================================== */
+
+.fridge-inventory{
+  touch-action:none!important;
+  overscroll-behavior:contain;
+}
+
+.food-item{
+  touch-action:none!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none!important;
+  cursor:grab;
+}
+
+.food-item *,
+.food-shape,
+.food-item small{
+  pointer-events:none!important;
+  touch-action:none!important;
+}
+
+.food-item.dragging{
+  position:fixed!important;
+  z-index:9999!important;
+  pointer-events:none!important;
+  width:96px!important;
+  height:96px!important;
+  min-height:96px!important;
+  transform:translate(-50%,-50%) scale(1.1)!important;
+  transition:none!important;
+  opacity:1!important;
+  cursor:grabbing;
+  will-change:left,top,transform;
+}
+
+body.food-dragging{
+  overflow:hidden!important;
+  touch-action:none!important;
+}
+
+body.food-dragging *{
+  overscroll-behavior:none;
+}
+
+.food-drag-hint{
+  position:fixed;
+  left:50%;
+  bottom:128px;
+  z-index:10000;
+  transform:translateX(-50%);
+  padding:9px 14px;
+  border-radius:999px;
+  color:#fff;
+  font-size:.75rem;
+  font-weight:900;
+  background:rgba(16,28,42,.9);
+  box-shadow:0 8px 18px rgba(0,0,0,.22);
+  pointer-events:none;
+  animation:dragHintIn .25s ease;
+}
+
+@keyframes dragHintIn{
+  from{opacity:0;transform:translate(-50%,8px)}
+  to{opacity:1;transform:translate(-50%,0)}
+}

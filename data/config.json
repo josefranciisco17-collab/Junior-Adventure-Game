@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -76,7 +76,11 @@
     "audioUnlockOnEveryAction": true,
     "louderAudio": true,
     "snoringLoop": true,
-    "soundButtonAlwaysVisible": true
+    "soundButtonAlwaysVisible": true,
+    "androidTouchDrag": true,
+    "pointerCaptureFallback": true,
+    "preventScrollWhileDragging": true,
+    "largerMouthDropZone": true
   },
   "kitchenFeeding": {
     "interactiveFridge": true,

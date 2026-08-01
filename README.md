@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.8.0
+## Versión 0.8.1
 
 Incluye:
 
@@ -146,3 +146,13 @@ Nota: los navegadores móviles exigen tocar la pantalla una vez para permitir el
 - La barra de hambre aumenta según el alimento.
 - Junior muestra felicidad y salta después de comer.
 - Los controles de alimentación funcionan únicamente en la cocina.
+
+
+## Corrección 0.8.1
+
+- Se corrigió el arrastre de alimentos en Android.
+- Se añadieron eventos táctiles de respaldo además de Pointer Events.
+- El navegador ya no desplaza la pantalla mientras sostienes comida.
+- El alimento sigue el dedo como elemento flotante.
+- Se amplió la zona de la boca para facilitar soltar la comida.
+- Aparece una indicación mientras arrastras.
