@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.8.2
+## Versión 0.8.3
 
 Incluye:
 
@@ -166,3 +166,12 @@ Nota: los navegadores móviles exigen tocar la pantalla una vez para permitir el
 - Se evita perder el arrastre al salir del área del refrigerador.
 - El sistema separa correctamente eventos táctiles y eventos de mouse.
 - La zona de entrega en la boca es más grande.
+
+
+## Corrección real del arrastre 0.8.3
+
+- Se identificó que el movimiento táctil seguía asociado al alimento original.
+- Los eventos touchmove, touchend y touchcancel ahora se escuchan en toda la ventana.
+- Se eliminó la dependencia de una capa creada después de comenzar el toque.
+- Se usan listeners en fase de captura para evitar que Android o el navegador bloqueen el gesto.
+- El alimento original se marca visualmente mientras la copia flotante sigue el dedo.

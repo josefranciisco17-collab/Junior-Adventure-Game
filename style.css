@@ -1891,3 +1891,31 @@ body.food-dragging{
   touch-action:none;
   pointer-events:auto;
 }
+
+
+/* ==========================================================
+   0.8.3 — CAPTURA GLOBAL DEL ARRASTRE
+   ========================================================== */
+
+.food-item:active{
+  transform:scale(.92);
+  filter:brightness(.95);
+}
+
+.food-item.drag-source{
+  opacity:.28!important;
+  outline:3px dashed rgba(51,128,184,.55);
+  outline-offset:2px;
+}
+
+.food-drag-clone{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+
+body.food-dragging{
+  height:100%;
+  position:fixed;
+  inset:0;
+}

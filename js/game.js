@@ -365,11 +365,6 @@
       document.body.appendChild(clone);
       this.dragClone = clone;
 
-      const layer = document.createElement("div");
-      layer.className = "drag-capture-layer";
-      document.body.appendChild(layer);
-      this.dragLayer = layer;
-
       document.body.classList.add("food-dragging");
       this.showDragHint();
       this.moveFoodClone(x, y);
@@ -382,6 +377,7 @@
 
           if (!touch) return;
           event.preventDefault();
+          event.stopPropagation();
           this.moveFoodClone(touch.clientX, touch.clientY);
         };
 
@@ -391,15 +387,19 @@
           ) || event.changedTouches[0];
 
           event.preventDefault();
+          event.stopPropagation();
+
           this.finishFoodCloneDrag(
             touch?.clientX ?? this.lastDragX,
             touch?.clientY ?? this.lastDragY
           );
         };
 
-        layer.addEventListener("touchmove", this.touchMoveHandler, { passive: false });
-        layer.addEventListener("touchend", this.touchEndHandler, { passive: false });
-        layer.addEventListener("touchcancel", this.touchEndHandler, { passive: false });
+        // El movimiento de un toque continúa asociado al elemento original.
+        // Por eso se escucha en window, no en una capa creada después.
+        window.addEventListener("touchmove", this.touchMoveHandler, { passive: false, capture: true });
+        window.addEventListener("touchend", this.touchEndHandler, { passive: false, capture: true });
+        window.addEventListener("touchcancel", this.touchEndHandler, { passive: false, capture: true });
       } else {
         this.pointerMoveHandler = (event) => {
           if (event.pointerId !== this.dragPointerId) return;
@@ -413,9 +413,9 @@
           this.finishFoodCloneDrag(event.clientX, event.clientY);
         };
 
-        layer.addEventListener("pointermove", this.pointerMoveHandler, { passive: false });
-        layer.addEventListener("pointerup", this.pointerEndHandler, { passive: false });
-        layer.addEventListener("pointercancel", this.pointerEndHandler, { passive: false });
+        window.addEventListener("pointermove", this.pointerMoveHandler, { passive: false, capture: true });
+        window.addEventListener("pointerup", this.pointerEndHandler, { passive: false, capture: true });
+        window.addEventListener("pointercancel", this.pointerEndHandler, { passive: false, capture: true });
       }
     }
 
@@ -465,20 +465,16 @@
       this.draggedFood?.classList.remove("drag-source");
       this.dragClone?.remove();
 
-      if (this.dragLayer) {
-        if (this.touchMoveHandler) {
-          this.dragLayer.removeEventListener("touchmove", this.touchMoveHandler);
-          this.dragLayer.removeEventListener("touchend", this.touchEndHandler);
-          this.dragLayer.removeEventListener("touchcancel", this.touchEndHandler);
-        }
+      if (this.touchMoveHandler) {
+        window.removeEventListener("touchmove", this.touchMoveHandler, true);
+        window.removeEventListener("touchend", this.touchEndHandler, true);
+        window.removeEventListener("touchcancel", this.touchEndHandler, true);
+      }
 
-        if (this.pointerMoveHandler) {
-          this.dragLayer.removeEventListener("pointermove", this.pointerMoveHandler);
-          this.dragLayer.removeEventListener("pointerup", this.pointerEndHandler);
-          this.dragLayer.removeEventListener("pointercancel", this.pointerEndHandler);
-        }
-
-        this.dragLayer.remove();
+      if (this.pointerMoveHandler) {
+        window.removeEventListener("pointermove", this.pointerMoveHandler, true);
+        window.removeEventListener("pointerup", this.pointerEndHandler, true);
+        window.removeEventListener("pointercancel", this.pointerEndHandler, true);
       }
 
       document.body.classList.remove("food-dragging");
