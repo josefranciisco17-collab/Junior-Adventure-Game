@@ -162,5 +162,24 @@
     }
   }
 
+  JuniorCharacter.prototype.yawn = function () {
+    if (this.state === "sleeping") return;
+    this.element.classList.add("yawning");
+    this.setState("tired", 1700);
+    window.setTimeout(() => {
+      this.element.classList.remove("yawning");
+    }, 1800);
+  };
+
+  JuniorCharacter.prototype.pet = function () {
+    this.element.classList.remove("pet-happy");
+    void this.element.offsetWidth;
+    this.element.classList.add("pet-happy");
+    this.setState("happy", 1000);
+    window.setTimeout(() => {
+      this.element.classList.remove("pet-happy");
+    }, 950);
+  };
+
   window.JuniorCharacter = JuniorCharacter;
 })();

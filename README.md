@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.5.2
+## Versión 0.6.0
 
 Incluye:
 
@@ -92,3 +92,16 @@ Las cuatro habitaciones están construidas con objetos independientes y transici
 - Se corrigieron conflictos de filtros y recortes en navegadores Android.
 - El personaje aparece en la pantalla de carga, el menú y la partida.
 - Se conservaron respiración, parpadeo y movimiento de mirada.
+
+
+## Casa Viva 0.6.0
+
+- Reloj analógico y digital con la hora real.
+- Ciclo automático de día, tarde y noche.
+- Iluminación adaptada a la hora.
+- Televisión animada.
+- Plantas, estrellas, reflejos y objetos con movimiento.
+- Acciones diferentes en sala, cocina, baño y dormitorio.
+- Efectos de burbujas, vapor y estrellas.
+- Junior bosteza, recibe caricias y reacciona a cada habitación.
+- Transiciones suaves al cambiar de cuarto.

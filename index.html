@@ -313,7 +313,7 @@
         <button id="playBtn" class="btn primary">Jugar</button>
         <button id="continueBtn" class="btn secondary">Continuar</button>
         <button id="settingsBtn" class="btn secondary">Ajustes</button>
-        <small>Versión 0.5.2</small>
+        <small>Versión 0.6.0</small>
       </div>
     </section>
 
@@ -339,8 +339,9 @@
           <div class="living-picture">
             <span></span>
           </div>
-          <div class="living-clock">
-            <i></i><b></b>
+          <div class="living-clock" aria-label="Reloj de la casa">
+            <i class="clock-hour"></i><b class="clock-minute"></b>
+            <span id="digitalClock" class="digital-clock"></span>
           </div>
           <div class="living-sofa">
             <div class="living-sofa-back"></div>
@@ -498,6 +499,10 @@
             <div class="bed-pot"></div>
           </div>
         </div>
+
+        <div id="dayNightOverlay" class="day-night-overlay" aria-hidden="true"></div>
+        <div id="roomParticles" class="room-particles" aria-hidden="true"></div>
+        <div id="roomActionEffect" class="room-action-effect" aria-hidden="true"></div>
 
         <div id="junior" class="junior junior-vector" data-state="neutral" tabindex="0" aria-label="Junior">
           <svg class="junior-svg" viewBox="0 0 600 650" role="img" aria-label="Junior">
@@ -674,10 +679,10 @@
       </nav>
 
       <div class="actions">
-        <button data-action="feed">Dar comida</button>
-        <button data-action="clean">Bañar</button>
-        <button data-action="play">Jugar</button>
-        <button data-action="sleep">Dormir</button>
+        <button id="primaryAction" data-action="primary">Ver TV</button>
+        <button id="secondaryAction" data-action="secondary">Jugar</button>
+        <button id="careAction" data-action="care">Acariciar</button>
+        <button id="restAction" data-action="rest">Descansar</button>
       </div>
     </section>
 

@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -36,5 +36,12 @@
     "loadingUsesOfficialJunior": true,
     "svgIdsAreUnique": true,
     "androidVisibilityFix": true
+  },
+  "houseAlive": {
+    "realClock": true,
+    "dayNightCycle": true,
+    "roomSpecificActions": true,
+    "ambientAnimations": true,
+    "particles": true
   }
 }

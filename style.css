@@ -969,3 +969,245 @@ linear-gradient(90deg,rgba(255,255,255,.14),transparent 35%,transparent 65%,rgba
   0%,100%{transform:translateY(0) scale(1)}
   50%{transform:translateY(-2px) scale(1.008,.992)}
 }
+
+
+/* ==========================================================
+   JUNIOR POCKET ADVENTURE 0.6 — CASA VIVA
+   ========================================================== */
+
+.day-night-overlay{
+  position:absolute;
+  inset:0;
+  z-index:8;
+  pointer-events:none;
+  opacity:0;
+  background:linear-gradient(rgba(23,37,73,.28),rgba(13,22,46,.42));
+  transition:opacity 1.2s ease,background 1.2s ease;
+  mix-blend-mode:multiply;
+}
+
+.game-screen.is-evening .day-night-overlay{
+  opacity:.22;
+  background:linear-gradient(rgba(255,148,83,.16),rgba(81,56,104,.24));
+}
+
+.game-screen.is-night .day-night-overlay{
+  opacity:.5;
+  background:linear-gradient(rgba(22,36,74,.36),rgba(9,17,38,.55));
+}
+
+.room-particles,
+.room-action-effect{
+  position:absolute;
+  inset:0;
+  z-index:12;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.room-particle{
+  position:absolute;
+  border-radius:50%;
+  opacity:0;
+  animation:particleFloat var(--duration,3s) ease-out forwards;
+}
+
+@keyframes particleFloat{
+  0%{opacity:0;transform:translateY(12px) scale(.55)}
+  18%{opacity:.85}
+  100%{opacity:0;transform:translateY(-110px) translateX(var(--drift,0px)) scale(1.2)}
+}
+
+.action-bubble{
+  position:absolute;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:rgba(213,245,255,.72);
+  border:2px solid rgba(255,255,255,.75);
+  animation:bubbleRise 2.8s ease-out forwards;
+}
+@keyframes bubbleRise{
+  0%{opacity:0;transform:translateY(20px) scale(.5)}
+  20%{opacity:1}
+  100%{opacity:0;transform:translateY(-170px) translateX(var(--drift,0px)) scale(1.25)}
+}
+
+.action-steam{
+  position:absolute;
+  width:18px;
+  height:58px;
+  border-radius:50%;
+  border-left:5px solid rgba(255,255,255,.58);
+  animation:steamRise 2.1s ease-out forwards;
+}
+@keyframes steamRise{
+  0%{opacity:0;transform:translateY(12px) scale(.7)}
+  30%{opacity:.8}
+  100%{opacity:0;transform:translateY(-80px) translateX(var(--drift,0px)) scale(1.1)}
+}
+
+.action-star{
+  position:absolute;
+  width:18px;
+  aspect-ratio:1;
+  background:#ffe37b;
+  clip-path:polygon(50% 0,61% 35%,98% 35%,68% 56%,79% 92%,50% 70%,21% 92%,32% 56%,2% 35%,39% 35%);
+  filter:drop-shadow(0 0 5px rgba(255,225,103,.7));
+  animation:starPop 1.5s ease-out forwards;
+}
+@keyframes starPop{
+  0%{opacity:0;transform:scale(.2) rotate(0)}
+  30%{opacity:1;transform:scale(1.15) rotate(45deg)}
+  100%{opacity:0;transform:translateY(-65px) scale(.6) rotate(120deg)}
+}
+
+/* Reloj real */
+.living-clock{
+  overflow:visible;
+}
+.living-clock .digital-clock{
+  position:absolute;
+  left:50%;
+  top:67px;
+  transform:translateX(-50%);
+  min-width:62px;
+  padding:3px 7px;
+  border-radius:999px;
+  color:#fff;
+  font-size:.62rem;
+  font-weight:900;
+  letter-spacing:.03em;
+  text-align:center;
+  background:rgba(75,47,29,.82);
+  box-shadow:0 4px 7px rgba(0,0,0,.12);
+}
+
+/* Casa viva */
+.living-plant .plant-leaf,
+.bedroom-plant .bed-leaf{
+  animation:plantSway 4.8s ease-in-out infinite;
+}
+.living-plant .leaf-two,
+.bedroom-plant .bed-leaf-two{animation-delay:-1.3s}
+.living-plant .leaf-three,
+.bedroom-plant .bed-leaf-three{animation-delay:-2.2s}
+@keyframes plantSway{
+  0%,100%{filter:brightness(1)}
+  50%{filter:brightness(1.06);margin-left:2px}
+}
+
+.kitchen-microwave .microwave-window::after{
+  content:"";
+  position:absolute;
+  inset:18%;
+  border-radius:50%;
+  border:3px solid rgba(121,189,205,.35);
+  animation:microwavePulse 2.4s ease-in-out infinite;
+}
+@keyframes microwavePulse{
+  50%{transform:scale(1.22);opacity:.28}
+}
+
+.bathroom-mirror::after{
+  content:"";
+  position:absolute;
+  inset:8%;
+  border-radius:inherit;
+  background:linear-gradient(125deg,rgba(255,255,255,.45),transparent 38%);
+  animation:mirrorShine 5s ease-in-out infinite;
+}
+@keyframes mirrorShine{
+  0%,65%,100%{opacity:.25}
+  75%{opacity:.75}
+}
+
+.bedroom-star{
+  animation:starTwinkle 2.4s ease-in-out infinite;
+}
+.star-two{animation-delay:-.8s}
+.star-three{animation-delay:-1.5s}
+@keyframes starTwinkle{
+  50%{opacity:.35;transform:scale(.7)}
+}
+
+.game-screen.is-day .bedroom-moon,
+.game-screen.is-day .bedroom-star{
+  opacity:.22;
+}
+.game-screen.is-night .living-sky{
+  background:linear-gradient(#243c69,#5b6c91);
+}
+.game-screen.is-night .living-cloud{
+  opacity:.18;
+}
+.game-screen.is-night .living-lamp-shade,
+.game-screen.is-night .bedroom-lamp-shade{
+  filter:drop-shadow(0 0 18px rgba(255,220,130,.95));
+}
+.game-screen.is-night .tv-glow{
+  opacity:.9;
+}
+
+/* Acción de TV */
+.game-screen.tv-on .living-tv-screen{
+  background:linear-gradient(145deg,#17345b,#2783a8);
+  box-shadow:0 0 25px rgba(92,208,255,.4),0 10px 16px rgba(0,0,0,.18);
+}
+.game-screen.tv-on .tv-glow{
+  animation:tvChannel 1.6s steps(4) infinite;
+}
+@keyframes tvChannel{
+  0%{background:radial-gradient(circle at 30% 50%,#b9f4ff,transparent 35%)}
+  33%{background:linear-gradient(135deg,#ffdc72,#5bd6ac)}
+  66%{background:radial-gradient(circle at 70% 40%,#d9a8ff,transparent 36%)}
+  100%{background:linear-gradient(45deg,#54bce6,#17345b)}
+}
+
+/* Junior más vivo */
+.junior-vector.yawning .open-mouth{
+  opacity:1;
+  rx:31px;
+  ry:38px;
+}
+.junior-vector.yawning .vector-mouth,
+.junior-vector.yawning .mouth-center{
+  opacity:0;
+}
+.junior-vector.yawning .vector-eyelid{
+  transform:translateY(-38px);
+}
+.junior-vector.yawning .vector-rig{
+  animation:yawnMotion 1.8s ease-in-out;
+}
+@keyframes yawnMotion{
+  0%,100%{transform:translateY(0) scale(1)}
+  48%{transform:translateY(6px) scale(1.015,.985)}
+}
+
+.junior-vector.pet-happy .vector-rig{
+  animation:petHappy .9s ease-in-out;
+}
+@keyframes petHappy{
+  0%,100%{transform:rotate(0)}
+  30%{transform:rotate(-2deg) translateY(-4px)}
+  65%{transform:rotate(2deg) translateY(-4px)}
+}
+
+/* Transición de cuarto */
+.room.room-changing .room-scene{
+  filter:blur(4px);
+  transform:scale(1.035);
+}
+
+.actions button{
+  transition:transform .16s ease,filter .2s ease;
+}
+.actions button:active{
+  transform:scale(.96);
+  filter:brightness(.94);
+}
+
+@media(max-height:720px){
+  .living-clock .digital-clock{display:none}
+}
