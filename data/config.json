@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -92,7 +92,11 @@
     "firstTapSelectsFood": true,
     "secondTouchDragsSelectedFood": true,
     "selectedFoodVisualIndicator": true,
-    "failedDropKeepsFoodSelected": true
+    "failedDropKeepsFoodSelected": true,
+    "firstTouchAllowsClick": true,
+    "secondTouchStartsDrag": true,
+    "tapJuniorFeedsSelectedFood": true,
+    "syntaxValidated": true
   },
   "kitchenFeeding": {
     "interactiveFridge": true,
@@ -110,6 +114,6 @@
     "chewingSound": true,
     "happyJumpAfterEating": true,
     "kitchenOnly": true,
-    "interactionMode": "tap-to-select-then-drag"
+    "interactionMode": "tap-select-second-touch-drag-or-tap-junior"
   }
 }

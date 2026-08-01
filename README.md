@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.8.4
+## Versión 0.8.5
 
 Incluye:
 
@@ -189,3 +189,13 @@ El arrastre ahora funciona en dos pasos:
 - Si lo sueltas lejos, permanece seleccionado para intentarlo de nuevo.
 - Al cerrar el refrigerador se cancela la selección.
 - Se muestran instrucciones visibles en pantalla.
+
+
+## Corrección 0.8.5
+
+- Primer toque: selecciona el alimento.
+- Aparece una marca azul con una palomita.
+- Segundo toque sostenido: permite arrastrarlo.
+- Alternativa: después de seleccionarlo, toca directamente a Junior para que lo coma.
+- El primer toque ya no bloquea el click de Android.
+- game.js fue validado con Node antes de crear el ZIP.

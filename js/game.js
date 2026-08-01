@@ -110,7 +110,6 @@
       this.dom.closeFridge?.addEventListener("click", () => this.closeFridge());
 
       document.querySelectorAll(".food-item").forEach((item) => {
-        // Primer toque: seleccionar. Segundo toque sostenido/movido: arrastrar.
         item.addEventListener("click", (event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -119,7 +118,7 @@
 
           if (this.selectedFood === item) {
             this.showFoodSelectionMessage(
-              `Mantén el dedo sobre ${item.dataset.name || "la comida"} y arrástrala hasta Junior.`
+              `Ahora mantén el dedo sobre ${item.dataset.name || "la comida"} y muévelo, o toca la boca de Junior.`
             );
           } else {
             this.selectFood(item);
@@ -127,16 +126,15 @@
         });
 
         item.addEventListener("touchstart", (event) => {
+          if (this.selectedFood !== item) {
+            return;
+          }
+
           const touch = event.touches[0];
           if (!touch) return;
 
           event.preventDefault();
           event.stopPropagation();
-
-          if (this.selectedFood !== item) {
-            this.selectFood(item);
-            return;
-          }
 
           this.beginFoodDrag(
             item,
@@ -149,14 +147,10 @@
 
         item.addEventListener("pointerdown", (event) => {
           if (event.pointerType === "touch") return;
+          if (this.selectedFood !== item) return;
 
           event.preventDefault();
           event.stopPropagation();
-
-          if (this.selectedFood !== item) {
-            this.selectFood(item);
-            return;
-          }
 
           this.beginFoodDrag(
             item,
@@ -166,6 +160,22 @@
             "pointer"
           );
         }, { passive: false });
+      });
+
+      this.character.element.addEventListener("click", (event) => {
+        if (!this.selectedFood) return;
+        if ((this.save.room || "living") !== "kitchen") return;
+        if (!this.dom.gameScreen.classList.contains("fridge-open")) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const item = this.selectedFood;
+        this.selectedFood = null;
+        item.classList.remove("food-selected");
+        this.character.element.classList.remove("food-target-ready");
+        this.hideFoodSelectionMessage();
+        this.feedDraggedFood(item);
       });
 
       document.querySelectorAll("[data-action]").forEach((button) => {
@@ -395,11 +405,12 @@
       this.clearFoodSelection();
       this.selectedFood = item;
       item.classList.add("food-selected");
+      this.character.element.classList.add("food-target-ready");
 
       AudioEngine.play("tap");
       this.character.setState("surprised", 650);
       this.showFoodSelectionMessage(
-        `${item.dataset.name || "Comida"} seleccionada. Tócala otra vez y arrástrala hasta la boca de Junior.`
+        `${item.dataset.name || "Comida"} seleccionada. Tócala otra vez y arrástrala, o toca directamente la boca de Junior.`
       );
     }
 
@@ -408,6 +419,7 @@
         food.classList.remove("food-selected");
       });
       this.selectedFood = null;
+      this.character.element.classList.remove("food-target-ready");
       this.hideFoodSelectionMessage();
     }
 

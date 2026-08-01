@@ -1987,3 +1987,33 @@ body.food-dragging{
   -webkit-touch-callout:none!important;
   user-select:none!important;
 }
+
+
+/* ==========================================================
+   0.8.5 — SELECCIÓN REAL EN DOS PASOS
+   ========================================================== */
+
+.food-item.food-selected{
+  z-index:40!important;
+}
+
+.food-item.food-selected::before{
+  content:"✓";
+  position:absolute;
+  right:-8px;
+  top:-8px;
+  width:27px;
+  height:27px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:#fff;
+  font-size:.9rem;
+  font-weight:900;
+  background:#2398ea;
+  box-shadow:0 5px 10px rgba(0,0,0,.22);
+}
+
+.junior-vector.food-target-ready{
+  filter:drop-shadow(0 0 12px rgba(74,184,255,.72));
+}
