@@ -2216,3 +2216,132 @@ body.food-dragging{
     width:52%;
   }
 }
+
+
+/* ==========================================================
+   0.9.1 — REFRIGERADOR GRANDE, ALTO Y COMPLETAMENTE VISIBLE
+   ========================================================== */
+
+.fridge-module-backdrop{
+  position:absolute;
+  inset:0;
+  z-index:68;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  background:rgba(8,18,29,.38);
+  backdrop-filter:blur(2px);
+  transition:opacity .22s ease,visibility .22s ease;
+}
+
+.fridge-module-backdrop.visible{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+.fridge-module{
+  position:absolute!important;
+  left:50%!important;
+  top:3%!important;
+  bottom:auto!important;
+  width:min(86%,430px)!important;
+  height:min(72%,560px)!important;
+  max-height:72%!important;
+  z-index:80!important;
+  transform:translateX(-50%) translateY(-14px) scale(.96)!important;
+  padding:12px!important;
+  gap:9px!important;
+  overflow:hidden!important;
+}
+
+.game-screen.fridge-module-open .fridge-module{
+  transform:translateX(-50%) translateY(0) scale(1)!important;
+}
+
+.fridge-module-header{
+  flex:0 0 auto;
+  min-height:38px;
+  padding:0 2px;
+  font-size:1rem;
+}
+
+.fridge-module-help{
+  flex:0 0 auto;
+  font-size:.68rem!important;
+  line-height:1.42!important;
+  padding:8px 10px!important;
+}
+
+.fridge-module-foods{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+  padding:4px 5px 8px!important;
+  scrollbar-width:thin;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+.fridge-food{
+  min-height:105px!important;
+  padding:8px!important;
+}
+
+.fridge-food .food-shape{
+  transform:scale(.92)!important;
+  margin-top:4px!important;
+}
+
+.fridge-food small{
+  margin-top:6px!important;
+  font-size:.68rem!important;
+}
+
+.fridge-feed-selected{
+  flex:0 0 auto!important;
+  min-height:46px!important;
+  font-size:.78rem!important;
+  margin-top:2px!important;
+}
+
+.game-screen.fridge-module-open .junior-vector{
+  filter:brightness(.72) saturate(.85);
+  transform:translateX(-50%) scale(.96);
+}
+
+.game-screen.fridge-module-open .kitchen-scene > *:not(.fridge-module):not(.fridge-module-backdrop){
+  filter:brightness(.82);
+}
+
+/* Evita que Junior tape el contenido aunque la pantalla sea baja */
+@media(max-height:760px){
+  .fridge-module{
+    top:2%!important;
+    height:68%!important;
+    max-height:68%!important;
+    width:min(90%,420px)!important;
+  }
+
+  .fridge-module-help{
+    font-size:.61rem!important;
+    padding:6px 8px!important;
+  }
+
+  .fridge-food{
+    min-height:92px!important;
+  }
+
+  .fridge-feed-selected{
+    min-height:42px!important;
+  }
+}
+
+@media(max-width:390px){
+  .fridge-module{
+    width:92%!important;
+  }
+}

@@ -41,6 +41,9 @@
       this.hotspot.className = "fridge-module-hotspot";
       this.hotspot.setAttribute("aria-label", "Abrir refrigerador");
 
+      this.backdrop = document.createElement("div");
+      this.backdrop.className = "fridge-module-backdrop";
+
       this.panel = document.createElement("section");
       this.panel.className = "fridge-module";
       this.panel.setAttribute("aria-hidden", "true");
@@ -78,6 +81,7 @@
       `;
 
       this.kitchenScene.appendChild(this.hotspot);
+      this.kitchenScene.appendChild(this.backdrop);
       this.kitchenScene.appendChild(this.panel);
 
       this.closeButton = this.panel.querySelector(".fridge-module-close");
@@ -88,6 +92,7 @@
     bind() {
       this.hotspot.addEventListener("click", () => this.open());
       this.closeButton.addEventListener("click", () => this.close());
+      this.backdrop.addEventListener("click", () => this.close());
       this.feedButton.addEventListener("click", () => this.feedSelected());
 
       this.foodButtons.forEach((food) => {
@@ -136,6 +141,7 @@
 
       this.gameScreen.classList.add("fridge-module-open");
       this.panel.setAttribute("aria-hidden", "false");
+      this.backdrop.classList.add("visible");
       AudioEngine.unlock();
       AudioEngine.play("fridgeOpen");
       this.character.setState("surprised", 700);
@@ -148,6 +154,7 @@
       this.clearSelection();
       this.gameScreen.classList.remove("fridge-module-open");
       this.panel.setAttribute("aria-hidden", "true");
+      this.backdrop.classList.remove("visible");
       if (playSound) AudioEngine.play("fridgeClose");
     }
 

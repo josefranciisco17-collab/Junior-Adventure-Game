@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -123,6 +123,10 @@
     "tapToSelect": true,
     "secondTouchToDrag": true,
     "tapJuniorToFeed": true,
-    "feedSelectedButton": true
+    "feedSelectedButton": true,
+    "largeCenteredModal": true,
+    "scrollableFoodGrid": true,
+    "backdrop": true,
+    "alwaysAboveJunior": true
   }
 }
