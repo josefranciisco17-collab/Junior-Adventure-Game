@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.8.3
+## Versión 0.8.4
 
 Incluye:
 
@@ -175,3 +175,17 @@ Nota: los navegadores móviles exigen tocar la pantalla una vez para permitir el
 - Se eliminó la dependencia de una capa creada después de comenzar el toque.
 - Se usan listeners en fase de captura para evitar que Android o el navegador bloqueen el gesto.
 - El alimento original se marca visualmente mientras la copia flotante sigue el dedo.
+
+
+## Nuevo control de comida 0.8.4
+
+El arrastre ahora funciona en dos pasos:
+
+1. Toca una vez el alimento para seleccionarlo.
+2. El alimento queda marcado en azul.
+3. Vuelve a poner el dedo sobre el alimento seleccionado.
+4. Sin levantar el dedo, arrástralo hasta la boca de Junior.
+
+- Si lo sueltas lejos, permanece seleccionado para intentarlo de nuevo.
+- Al cerrar el refrigerador se cancela la selección.
+- Se muestran instrucciones visibles en pantalla.
