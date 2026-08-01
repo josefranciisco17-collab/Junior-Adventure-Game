@@ -1849,3 +1849,45 @@ body.food-dragging *{
   from{opacity:0;transform:translate(-50%,8px)}
   to{opacity:1;transform:translate(-50%,0)}
 }
+
+
+/* ==========================================================
+   0.8.2 — ARRASTRE CON COPIA FLOTANTE
+   ========================================================== */
+
+.food-drag-clone{
+  position:fixed!important;
+  z-index:100000!important;
+  width:96px!important;
+  height:96px!important;
+  min-height:96px!important;
+  margin:0!important;
+  pointer-events:none!important;
+  touch-action:none!important;
+  transform:translate(-50%,-50%) scale(1.08)!important;
+  transition:none!important;
+  opacity:1!important;
+  box-shadow:0 18px 30px rgba(0,0,0,.3)!important;
+  will-change:left,top,transform;
+}
+
+.food-item.drag-source{
+  opacity:.35;
+  transform:scale(.94);
+}
+
+body.food-dragging{
+  position:fixed;
+  width:100%;
+  overflow:hidden!important;
+  touch-action:none!important;
+}
+
+.drag-capture-layer{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  background:transparent;
+  touch-action:none;
+  pointer-events:auto;
+}

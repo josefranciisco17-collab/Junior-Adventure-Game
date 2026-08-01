@@ -110,24 +110,19 @@
       this.dom.closeFridge?.addEventListener("click", () => this.closeFridge());
 
       document.querySelectorAll(".food-item").forEach((item) => {
-        item.addEventListener("pointerdown", (event) => {
-          this.startFoodDrag(event, item);
-        }, { passive: false });
-
-        // Respaldo para navegadores Android que manejan mal pointer events.
         item.addEventListener("touchstart", (event) => {
-          if (this.draggedFood) return;
           const touch = event.touches[0];
           if (!touch) return;
           event.preventDefault();
+          event.stopPropagation();
+          this.beginFoodDrag(item, touch.identifier, touch.clientX, touch.clientY, "touch");
+        }, { passive: false });
 
-          this.startFoodDrag({
-            pointerId: touch.identifier,
-            clientX: touch.clientX,
-            clientY: touch.clientY,
-            preventDefault: () => event.preventDefault(),
-            currentTarget: item
-          }, item, true);
+        item.addEventListener("pointerdown", (event) => {
+          if (event.pointerType === "touch") return;
+          event.preventDefault();
+          event.stopPropagation();
+          this.beginFoodDrag(item, event.pointerId, event.clientX, event.clientY, "pointer");
         }, { passive: false });
       });
 
@@ -349,150 +344,142 @@
       if (playSound) AudioEngine.play("fridgeClose");
     }
 
-    startFoodDrag(event, item, touchFallback = false) {
+    beginFoodDrag(item, pointerId, x, y, mode) {
       if ((this.save.room || "living") !== "kitchen") return;
       if (!this.dom.gameScreen.classList.contains("fridge-open")) return;
       if (item.classList.contains("food-used")) return;
       if (this.draggedFood) return;
 
-      event.preventDefault?.();
-
       this.draggedFood = item;
-      this.dragPointerId = event.pointerId;
-      this.foodOrigin = {
-        parent: item.parentElement,
-        next: item.nextElementSibling
-      };
+      this.dragPointerId = pointerId;
+      this.dragMode = mode;
+      this.lastDragX = x;
+      this.lastDragY = y;
 
-      const rect = item.getBoundingClientRect();
-      this.dragOffsetX = event.clientX - rect.left;
-      this.dragOffsetY = event.clientY - rect.top;
+      item.classList.add("drag-source");
+
+      const clone = item.cloneNode(true);
+      clone.classList.remove("drag-source", "food-used");
+      clone.classList.add("food-drag-clone");
+      clone.removeAttribute("id");
+      document.body.appendChild(clone);
+      this.dragClone = clone;
+
+      const layer = document.createElement("div");
+      layer.className = "drag-capture-layer";
+      document.body.appendChild(layer);
+      this.dragLayer = layer;
 
       document.body.classList.add("food-dragging");
-      item.classList.add("dragging");
-      document.body.appendChild(item);
-
       this.showDragHint();
-      this.moveFood(event);
+      this.moveFoodClone(x, y);
 
-      if (!touchFallback) {
-        try {
-          item.setPointerCapture?.(event.pointerId);
-        } catch (error) {
-          console.warn("No se pudo capturar el puntero:", error);
-        }
+      if (mode === "touch") {
+        this.touchMoveHandler = (event) => {
+          const touch = [...event.touches].find(
+            (value) => value.identifier === this.dragPointerId
+          ) || event.touches[0];
+
+          if (!touch) return;
+          event.preventDefault();
+          this.moveFoodClone(touch.clientX, touch.clientY);
+        };
+
+        this.touchEndHandler = (event) => {
+          const touch = [...event.changedTouches].find(
+            (value) => value.identifier === this.dragPointerId
+          ) || event.changedTouches[0];
+
+          event.preventDefault();
+          this.finishFoodCloneDrag(
+            touch?.clientX ?? this.lastDragX,
+            touch?.clientY ?? this.lastDragY
+          );
+        };
+
+        layer.addEventListener("touchmove", this.touchMoveHandler, { passive: false });
+        layer.addEventListener("touchend", this.touchEndHandler, { passive: false });
+        layer.addEventListener("touchcancel", this.touchEndHandler, { passive: false });
+      } else {
+        this.pointerMoveHandler = (event) => {
+          if (event.pointerId !== this.dragPointerId) return;
+          event.preventDefault();
+          this.moveFoodClone(event.clientX, event.clientY);
+        };
+
+        this.pointerEndHandler = (event) => {
+          if (event.pointerId !== this.dragPointerId) return;
+          event.preventDefault();
+          this.finishFoodCloneDrag(event.clientX, event.clientY);
+        };
+
+        layer.addEventListener("pointermove", this.pointerMoveHandler, { passive: false });
+        layer.addEventListener("pointerup", this.pointerEndHandler, { passive: false });
+        layer.addEventListener("pointercancel", this.pointerEndHandler, { passive: false });
       }
-
-      const pointerMove = (moveEvent) => {
-        if (this.dragPointerId !== null && moveEvent.pointerId !== this.dragPointerId) return;
-        moveEvent.preventDefault?.();
-        this.moveFood(moveEvent);
-      };
-
-      const pointerEnd = (endEvent) => {
-        if (this.dragPointerId !== null && endEvent.pointerId !== this.dragPointerId) return;
-        this.removeDragListeners();
-        this.finishFoodDrag(endEvent);
-      };
-
-      const touchMove = (touchEvent) => {
-        if (!this.draggedFood) return;
-        const touch = [...touchEvent.touches].find(
-          (value) => value.identifier === this.dragPointerId
-        ) || touchEvent.touches[0];
-
-        if (!touch) return;
-        touchEvent.preventDefault();
-
-        this.moveFood({
-          clientX: touch.clientX,
-          clientY: touch.clientY,
-          preventDefault: () => touchEvent.preventDefault()
-        });
-      };
-
-      const touchEnd = (touchEvent) => {
-        if (!this.draggedFood) return;
-        const touch = [...touchEvent.changedTouches].find(
-          (value) => value.identifier === this.dragPointerId
-        ) || touchEvent.changedTouches[0];
-
-        this.removeDragListeners();
-        this.finishFoodDrag({
-          clientX: touch?.clientX ?? this.lastDragX,
-          clientY: touch?.clientY ?? this.lastDragY
-        });
-      };
-
-      this.activeDragHandlers = {
-        pointerMove,
-        pointerEnd,
-        touchMove,
-        touchEnd
-      };
-
-      window.addEventListener("pointermove", pointerMove, { passive: false });
-      window.addEventListener("pointerup", pointerEnd, { passive: false });
-      window.addEventListener("pointercancel", pointerEnd, { passive: false });
-      window.addEventListener("touchmove", touchMove, { passive: false });
-      window.addEventListener("touchend", touchEnd, { passive: false });
-      window.addEventListener("touchcancel", touchEnd, { passive: false });
     }
 
-    removeDragListeners() {
-      const handlers = this.activeDragHandlers;
-      if (!handlers) return;
-
-      window.removeEventListener("pointermove", handlers.pointerMove);
-      window.removeEventListener("pointerup", handlers.pointerEnd);
-      window.removeEventListener("pointercancel", handlers.pointerEnd);
-      window.removeEventListener("touchmove", handlers.touchMove);
-      window.removeEventListener("touchend", handlers.touchEnd);
-      window.removeEventListener("touchcancel", handlers.touchEnd);
-
-      this.activeDragHandlers = null;
-    }
-
-    moveFood(event) {
-      if (!this.draggedFood) return;
-      event.preventDefault?.();
-
-      const x = Number(event.clientX);
-      const y = Number(event.clientY);
-      if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+    moveFoodClone(x, y) {
+      if (!this.dragClone) return;
 
       this.lastDragX = x;
       this.lastDragY = y;
 
-      this.draggedFood.style.left = `${x}px`;
-      this.draggedFood.style.top = `${y}px`;
+      this.dragClone.style.left = `${x}px`;
+      this.dragClone.style.top = `${y}px`;
 
       const juniorRect = this.character.element.getBoundingClientRect();
       const mouthX = juniorRect.left + juniorRect.width * .5;
       const mouthY = juniorRect.top + juniorRect.height * .625;
       const distance = Math.hypot(x - mouthX, y - mouthY);
 
-      this.character.element.classList.toggle("food-near", distance < 125);
+      this.character.element.classList.toggle("food-near", distance < 135);
 
       const dx = Math.max(-9, Math.min(9, (x - mouthX) / 18));
       const dy = Math.max(-7, Math.min(7, (y - mouthY) / 22));
       this.character.element.style.setProperty("--gaze-x", `${dx}px`);
       this.character.element.style.setProperty("--gaze-y", `${dy}px`);
 
-      if (Math.random() < .28) this.spawnFoodTrail(x, y);
+      if (Math.random() < .22) this.spawnFoodTrail(x, y);
     }
 
-    finishFoodDrag(event) {
+    finishFoodCloneDrag(x, y) {
       if (!this.draggedFood) return;
 
       const item = this.draggedFood;
-      const x = Number(event.clientX ?? this.lastDragX);
-      const y = Number(event.clientY ?? this.lastDragY);
-
       const juniorRect = this.character.element.getBoundingClientRect();
       const mouthX = juniorRect.left + juniorRect.width * .5;
       const mouthY = juniorRect.top + juniorRect.height * .625;
       const distance = Math.hypot(x - mouthX, y - mouthY);
+
+      this.cleanupFoodDrag();
+
+      if (distance < 135) {
+        this.feedDraggedFood(item);
+      } else {
+        this.showMessage("Lleva el alimento hasta la boca de Junior.");
+      }
+    }
+
+    cleanupFoodDrag() {
+      this.draggedFood?.classList.remove("drag-source");
+      this.dragClone?.remove();
+
+      if (this.dragLayer) {
+        if (this.touchMoveHandler) {
+          this.dragLayer.removeEventListener("touchmove", this.touchMoveHandler);
+          this.dragLayer.removeEventListener("touchend", this.touchEndHandler);
+          this.dragLayer.removeEventListener("touchcancel", this.touchEndHandler);
+        }
+
+        if (this.pointerMoveHandler) {
+          this.dragLayer.removeEventListener("pointermove", this.pointerMoveHandler);
+          this.dragLayer.removeEventListener("pointerup", this.pointerEndHandler);
+          this.dragLayer.removeEventListener("pointercancel", this.pointerEndHandler);
+        }
+
+        this.dragLayer.remove();
+      }
 
       document.body.classList.remove("food-dragging");
       this.hideDragHint();
@@ -501,50 +488,27 @@
       this.character.element.style.setProperty("--gaze-x", "0px");
       this.character.element.style.setProperty("--gaze-y", "0px");
 
-      if (distance < 125) {
-        this.feedDraggedFood(item);
-      } else {
-        this.restoreFood(item);
-      }
-
       this.draggedFood = null;
+      this.dragClone = null;
+      this.dragLayer = null;
       this.dragPointerId = null;
-      this.lastDragX = null;
-      this.lastDragY = null;
-    }
-
-    restoreFood(item) {
-      item.classList.remove("dragging");
-      item.removeAttribute("style");
-
-      if (this.foodOrigin?.next && this.foodOrigin.next.parentElement === this.foodOrigin.parent) {
-        this.foodOrigin.parent.insertBefore(item, this.foodOrigin.next);
-      } else {
-        this.foodOrigin?.parent?.appendChild(item);
-      }
+      this.dragMode = null;
+      this.touchMoveHandler = null;
+      this.touchEndHandler = null;
+      this.pointerMoveHandler = null;
+      this.pointerEndHandler = null;
     }
 
     feedDraggedFood(item) {
       const hunger = Number(item.dataset.hunger || 10);
       const name = item.dataset.name || "comida";
 
-      item.classList.remove("dragging");
-      item.style.position = "fixed";
-      item.style.left = "50%";
-      item.style.top = "56%";
-      item.style.zIndex = "9999";
-      item.style.transition = "transform .24s ease,opacity .24s ease";
-      item.style.transform = "translate(-50%,-50%) scale(.35)";
-      item.style.opacity = "0";
+      item.classList.add("food-used");
 
       this.character.element.classList.add("eating");
       AudioEngine.play("bite");
 
       window.setTimeout(() => {
-        item.removeAttribute("style");
-        item.classList.add("food-used");
-        this.foodOrigin?.parent?.appendChild(item);
-
         this.changeNeed("hunger", hunger);
         this.changeNeed("happiness", 8);
         this.character.element.classList.remove("eating");

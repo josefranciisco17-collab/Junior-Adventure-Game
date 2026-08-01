@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -80,7 +80,11 @@
     "androidTouchDrag": true,
     "pointerCaptureFallback": true,
     "preventScrollWhileDragging": true,
-    "largerMouthDropZone": true
+    "largerMouthDropZone": true,
+    "floatingFoodClone": true,
+    "fullScreenDragCaptureLayer": true,
+    "originalFoodStaysInFridge": true,
+    "androidTouchStartOnlyForTouch": true
   },
   "kitchenFeeding": {
     "interactiveFridge": true,

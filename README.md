@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.8.1
+## Versión 0.8.2
 
 Incluye:
 
@@ -156,3 +156,13 @@ Nota: los navegadores móviles exigen tocar la pantalla una vez para permitir el
 - El alimento sigue el dedo como elemento flotante.
 - Se amplió la zona de la boca para facilitar soltar la comida.
 - Aparece una indicación mientras arrastras.
+
+
+## Corrección 0.8.2
+
+- El alimento original permanece dentro del refrigerador.
+- Se crea una copia flotante que sigue el dedo.
+- Una capa transparente captura todo el movimiento táctil.
+- Se evita perder el arrastre al salir del área del refrigerador.
+- El sistema separa correctamente eventos táctiles y eventos de mouse.
+- La zona de entrega en la boca es más grande.
