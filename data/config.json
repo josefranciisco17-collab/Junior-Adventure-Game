@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -43,5 +43,31 @@
     "roomSpecificActions": true,
     "ambientAnimations": true,
     "particles": true
+  },
+  "audio": {
+    "webAudioEngine": true,
+    "ambientMusicByRoom": true,
+    "soundEffects": [
+      "tap",
+      "room",
+      "happy",
+      "coin",
+      "tv",
+      "eat",
+      "drink",
+      "water",
+      "brush",
+      "sleep",
+      "wake",
+      "yawn",
+      "pet"
+    ]
+  },
+  "visualPolish": {
+    "animatedHud": true,
+    "needColorStates": true,
+    "touchHearts": true,
+    "sleepZ": true,
+    "currencyAnimations": true
   }
 }

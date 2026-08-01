@@ -313,7 +313,7 @@
         <button id="playBtn" class="btn primary">Jugar</button>
         <button id="continueBtn" class="btn secondary">Continuar</button>
         <button id="settingsBtn" class="btn secondary">Ajustes</button>
-        <small>Versión 0.6.0</small>
+        <small>Versión 0.7.0</small>
       </div>
     </section>
 
@@ -321,6 +321,7 @@
       <header class="topbar">
         <div class="currency"><span class="coin"></span><b id="coins">1250</b></div>
         <div class="currency"><span class="diamond"></span><b id="diamonds">30</b></div>
+        <button id="soundButton" class="sound-button" aria-label="Activar o silenciar sonido">♪</button>
         <button id="backToMenu" class="menu-icon" aria-label="Volver al menú">☰</button>
       </header>
 
@@ -503,6 +504,7 @@
         <div id="dayNightOverlay" class="day-night-overlay" aria-hidden="true"></div>
         <div id="roomParticles" class="room-particles" aria-hidden="true"></div>
         <div id="roomActionEffect" class="room-action-effect" aria-hidden="true"></div>
+        <div id="touchHearts" class="touch-hearts" aria-hidden="true"></div>
 
         <div id="junior" class="junior junior-vector" data-state="neutral" tabindex="0" aria-label="Junior">
           <svg class="junior-svg" viewBox="0 0 600 650" role="img" aria-label="Junior">
@@ -697,6 +699,7 @@
     </section>
   </main>
 
+  <script src="js/audio-engine.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/character.js"></script>
   <script src="js/game.js"></script>

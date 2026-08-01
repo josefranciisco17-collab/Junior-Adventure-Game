@@ -21,7 +21,7 @@
     bindEvents() {
       this.element.addEventListener("pointermove", (event) => this.lookAt(event));
       this.element.addEventListener("pointerleave", () => this.resetLook());
-      this.element.addEventListener("pointerdown", () => this.handleTouch());
+      this.element.addEventListener("pointerdown", (event) => this.handleTouch(event));
       this.element.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
@@ -85,7 +85,16 @@
       }
     }
 
-    handleTouch() {
+    handleTouch(event) {
+      if (event) {
+        const rect = this.element.getBoundingClientRect();
+        const isLeft = event.clientX < rect.left + rect.width / 2;
+        this.element.classList.remove("look-touch-left", "look-touch-right");
+        this.element.classList.add(isLeft ? "look-touch-left" : "look-touch-right");
+        window.setTimeout(() => {
+          this.element.classList.remove("look-touch-left", "look-touch-right");
+        }, 520);
+      }
       if (this.state === "sleeping") {
         this.setState("surprised", 1100);
       } else {
@@ -179,6 +188,15 @@
     window.setTimeout(() => {
       this.element.classList.remove("pet-happy");
     }, 950);
+  };
+
+  JuniorCharacter.prototype.shakeDry = function () {
+    this.element.classList.remove("shake-dry");
+    void this.element.offsetWidth;
+    this.element.classList.add("shake-dry");
+    window.setTimeout(() => {
+      this.element.classList.remove("shake-dry");
+    }, 720);
   };
 
   window.JuniorCharacter = JuniorCharacter;

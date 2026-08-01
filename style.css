@@ -1211,3 +1211,182 @@ linear-gradient(90deg,rgba(255,255,255,.14),transparent 35%,transparent 65%,rgba
 @media(max-height:720px){
   .living-clock .digital-clock{display:none}
 }
+
+
+/* ==========================================================
+   JUNIOR POCKET ADVENTURE 0.7 — VIDA, HUD Y SONIDO
+   ========================================================== */
+
+.sound-button{
+  width:44px;
+  height:44px;
+  margin-left:auto;
+  color:#fff;
+  border-radius:13px;
+  font-size:1.35rem;
+  font-weight:900;
+  background:rgba(0,0,0,.35);
+  transition:transform .18s ease,background .2s ease;
+}
+.sound-button.muted{
+  opacity:.5;
+  background:rgba(94,56,56,.5);
+}
+.sound-button:active{
+  transform:scale(.94);
+}
+.menu-icon{
+  margin-left:0;
+}
+
+.need-card,
+.needs article{
+  position:relative;
+  overflow:hidden;
+  transition:transform .22s ease,background .3s ease,box-shadow .3s ease;
+}
+.needs article::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-70%;
+  width:45%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
+  transform:skewX(-18deg);
+  animation:needShine 4.8s ease-in-out infinite;
+}
+.needs article:nth-child(2)::after{animation-delay:-1.2s}
+.needs article:nth-child(3)::after{animation-delay:-2.4s}
+.needs article:nth-child(4)::after{animation-delay:-3.6s}
+@keyframes needShine{
+  0%,70%,100%{left:-70%}
+  82%{left:125%}
+}
+
+.needs article.low{
+  background:rgba(130,43,43,.5);
+  box-shadow:inset 0 0 0 2px rgba(255,110,110,.18);
+  animation:needWarning 1.4s ease-in-out infinite;
+}
+.needs article.medium{
+  background:rgba(123,95,35,.38);
+}
+@keyframes needWarning{
+  50%{transform:translateY(-2px)}
+}
+
+.bar i{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(90deg,#45c665,#a5ef73);
+}
+.bar i::after{
+  content:"";
+  position:absolute;
+  inset:1px 0 auto;
+  height:35%;
+  background:rgba(255,255,255,.28);
+  border-radius:999px;
+}
+.needs article.medium .bar i{
+  background:linear-gradient(90deg,#e6ad43,#f0d46a);
+}
+.needs article.low .bar i{
+  background:linear-gradient(90deg,#df5b54,#f1936c);
+}
+
+.currency.bump{
+  animation:currencyBump .42s ease;
+}
+@keyframes currencyBump{
+  0%,100%{transform:scale(1)}
+  45%{transform:scale(1.09)}
+}
+
+.touch-hearts{
+  position:absolute;
+  inset:0;
+  z-index:14;
+  pointer-events:none;
+  overflow:hidden;
+}
+.touch-heart{
+  position:absolute;
+  width:20px;
+  height:18px;
+  transform:rotate(45deg);
+  background:#ef6d79;
+  opacity:0;
+  animation:heartFloat 1.45s ease-out forwards;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.2));
+}
+.touch-heart::before,
+.touch-heart::after{
+  content:"";
+  position:absolute;
+  width:20px;
+  height:18px;
+  border-radius:50%;
+  background:inherit;
+}
+.touch-heart::before{left:-10px}
+.touch-heart::after{top:-9px}
+@keyframes heartFloat{
+  0%{opacity:0;transform:translateY(15px) rotate(45deg) scale(.45)}
+  25%{opacity:1}
+  100%{opacity:0;transform:translateY(-95px) translateX(var(--drift,0px)) rotate(45deg) scale(1.05)}
+}
+
+.room-transition-cover{
+  position:absolute;
+  inset:0;
+  z-index:25;
+  pointer-events:none;
+  opacity:0;
+  backdrop-filter:blur(0);
+  background:rgba(10,22,38,.08);
+}
+.room-transition-cover.active{
+  animation:roomFade .42s ease;
+}
+@keyframes roomFade{
+  0%,100%{opacity:0;backdrop-filter:blur(0)}
+  50%{opacity:1;backdrop-filter:blur(5px)}
+}
+
+.junior-vector.look-touch-left .vector-rig{
+  transform:rotate(-1.7deg) translateX(-4px);
+}
+.junior-vector.look-touch-right .vector-rig{
+  transform:rotate(1.7deg) translateX(4px);
+}
+
+.junior-vector.shake-dry{
+  animation:shakeDry .68s linear;
+}
+@keyframes shakeDry{
+  0%,100%{transform:translateX(-50%) rotate(0)}
+  15%{transform:translateX(-50%) rotate(-3deg)}
+  30%{transform:translateX(-50%) rotate(3deg)}
+  45%{transform:translateX(-50%) rotate(-2.5deg)}
+  60%{transform:translateX(-50%) rotate(2.5deg)}
+  75%{transform:translateX(-50%) rotate(-1deg)}
+}
+
+.sleep-z{
+  position:absolute;
+  z-index:18;
+  right:23%;
+  top:32%;
+  font-weight:900;
+  color:#eaf2ff;
+  text-shadow:0 3px 7px rgba(25,38,72,.42);
+  opacity:0;
+  animation:sleepZ 2.3s ease-out forwards;
+}
+@keyframes sleepZ{
+  0%{opacity:0;transform:translateY(10px) scale(.6)}
+  25%{opacity:1}
+  100%{opacity:0;transform:translateY(-75px) translateX(25px) scale(1.3)}
+}

@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.6.0
+## Versión 0.7.0
 
 Incluye:
 
@@ -105,3 +105,19 @@ Las cuatro habitaciones están construidas con objetos independientes y transici
 - Efectos de burbujas, vapor y estrellas.
 - Junior bosteza, recibe caricias y reacciona a cada habitación.
 - Transiciones suaves al cambiar de cuarto.
+
+
+## Vida y sonido 0.7.0
+
+- Motor de audio Web Audio sin depender de archivos externos.
+- Música ambiental diferente en sala, cocina, baño y dormitorio.
+- Sonidos para televisión, comida, agua, baño, cepillado, sueño, despertar, bostezo y caricias.
+- Botón para activar o silenciar el audio.
+- Barras de necesidades con brillo y colores de advertencia.
+- Corazones al acariciar a Junior.
+- Z animadas al dormir.
+- Sacudida al secarse.
+- Reacciones hacia el lado donde se toca.
+- HUD más vivo y animaciones visuales adicionales.
+
+Nota: los navegadores móviles exigen tocar la pantalla una vez para permitir el audio.

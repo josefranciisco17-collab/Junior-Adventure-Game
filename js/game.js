@@ -35,7 +35,9 @@
         primaryAction: document.getElementById("primaryAction"),
         secondaryAction: document.getElementById("secondaryAction"),
         careAction: document.getElementById("careAction"),
-        restAction: document.getElementById("restAction")
+        restAction: document.getElementById("restAction"),
+        soundButton: document.getElementById("soundButton"),
+        touchHearts: document.getElementById("touchHearts")
       };
     }
 
@@ -43,6 +45,8 @@
       this.character = new JuniorCharacter(document.getElementById("junior"));
       this.character.onInteract = () => {
         this.changeNeed("happiness", 1);
+        this.spawnHearts(4);
+        AudioEngine.play("pet");
         this.showMessage("Junior disfruta tu atención.");
       };
 
@@ -55,10 +59,28 @@
     }
 
     bindEvents() {
-      this.dom.playBtn.addEventListener("click", () => this.startNewGame());
+      const unlockAudio = () => {
+        AudioEngine.unlock();
+        document.removeEventListener("pointerdown", unlockAudio);
+      };
+      document.addEventListener("pointerdown", unlockAudio, { once: true });
+
+      this.dom.playBtn.addEventListener("click", async () => {
+        await AudioEngine.unlock();
+        AudioEngine.play("tap");
+        this.startNewGame();
+      });
       this.dom.continueBtn.addEventListener("click", () => this.continueGame());
       this.dom.settingsBtn.addEventListener("click", () => this.showScreen("settingsScreen"));
       this.dom.settingsBack.addEventListener("click", () => this.showScreen("menuScreen"));
+      this.dom.soundButton.addEventListener("click", async () => {
+        await AudioEngine.unlock();
+        this.save.settings.sound = !this.save.settings.sound;
+        this.save.settings.music = this.save.settings.sound;
+        this.applySettings();
+        this.persist();
+      });
+
       this.dom.backToMenu.addEventListener("click", () => {
         this.persist();
         this.showScreen("menuScreen");
@@ -191,6 +213,7 @@
         const gameVisible = this.dom.gameScreen.classList.contains("active");
         if (gameVisible && this.character.state === "neutral" && Math.random() < .65) {
           this.character.yawn();
+          AudioEngine.play("yawn");
         }
         this.scheduleIdleYawn();
       }, 12000 + Math.random() * 9000);
@@ -260,6 +283,7 @@
       this.tvOn = !this.tvOn;
       this.dom.gameScreen.classList.toggle("tv-on", this.tvOn);
       this.character.setState("surprised", 700);
+      AudioEngine.play("tv");
       this.showMessage(this.tvOn ? "Junior está viendo la televisión." : "La televisión se apagó.");
       this.spawnStars(5);
     }
@@ -269,18 +293,22 @@
       this.changeNeed("sleep", -3);
       this.character.setState("happy", 1500);
       this.spawnStars(9);
+      AudioEngine.play("happy");
       this.showMessage("Junior se divirtió mucho.");
     }
 
     petJunior() {
       this.changeNeed("happiness", 7);
       this.character.pet();
+      this.spawnHearts(5);
+      AudioEngine.play("pet");
       this.showMessage("Junior recibió una caricia.");
     }
 
     restJunior() {
       this.changeNeed("sleep", 9);
       this.character.setState("tired", 1200);
+      AudioEngine.play("sleep");
       this.showMessage("Junior descansó un momento.");
     }
 
@@ -292,6 +320,7 @@
       this.save.coins -= 5;
       this.changeNeed("hunger", 20);
       this.character.setState("happy", 1400);
+      AudioEngine.play("eat");
       this.spawnSteam(4, 56, 45);
       this.showMessage("Junior comió y quedó satisfecho.");
     }
@@ -300,12 +329,14 @@
       this.changeNeed("hunger", 5);
       this.changeNeed("happiness", 3);
       this.spawnBubbles(7, 53, 52);
+      AudioEngine.play("drink");
       this.character.setState("happy", 900);
       this.showMessage("Junior tomó agua fresca.");
     }
 
     cookForJunior() {
       this.spawnSteam(7, 70, 45);
+      AudioEngine.play("eat");
       this.character.setState("surprised", 900);
       this.showMessage("La cocina huele delicioso.");
     }
@@ -313,6 +344,7 @@
     giveFruit() {
       this.changeNeed("hunger", 10);
       this.spawnStars(5);
+      AudioEngine.play("happy");
       this.character.setState("happy", 1100);
       this.showMessage("Junior probó fruta.");
     }
@@ -320,6 +352,7 @@
     batheJunior() {
       this.changeNeed("hygiene", 28);
       this.spawnBubbles(14, 70, 58);
+      AudioEngine.play("water");
       this.character.setState("surprised", 1100);
       this.showMessage("Junior quedó limpio y fresco.");
     }
@@ -327,12 +360,15 @@
     brushJunior() {
       this.changeNeed("hygiene", 9);
       this.spawnStars(5);
+      AudioEngine.play("brush");
       this.character.pet();
       this.showMessage("Junior quedó bien arreglado.");
     }
 
     dryJunior() {
       this.character.setState("happy", 1000);
+      this.character.shakeDry();
+      AudioEngine.play("water");
       this.spawnStars(7);
       this.showMessage("Junior quedó completamente seco.");
     }
@@ -341,6 +377,7 @@
       this.changeNeed("happiness", 5);
       this.changeNeed("sleep", 5);
       this.spawnBubbles(8, 52, 54);
+      AudioEngine.play("water");
       this.character.setState("tired", 1200);
       this.showMessage("Junior se relajó en el baño.");
     }
@@ -348,6 +385,8 @@
     sleepJunior() {
       this.changeNeed("sleep", 30);
       this.character.setState("sleeping");
+      AudioEngine.play("sleep");
+      this.spawnSleepZ();
       this.dom.gameScreen.classList.add("is-night");
       this.showMessage("Junior está durmiendo.");
       window.setTimeout(() => {
@@ -366,6 +405,7 @@
 
     wakeJunior() {
       this.character.setState("surprised", 900);
+      AudioEngine.play("wake");
       this.showMessage("Junior despertó.");
     }
 
@@ -388,6 +428,8 @@
         });
 
         this.updateActionLabels();
+        AudioEngine.startAmbient(room);
+        AudioEngine.play("room");
         this.character.setState("surprised", 550);
         this.dom.room?.classList.remove("room-changing");
 
@@ -424,6 +466,10 @@
         const value = Math.round(this.save.needs[key]);
         document.getElementById(ids[0]).style.width = `${value}%`;
         document.getElementById(ids[1]).textContent = `${value}%`;
+
+        const card = document.getElementById(ids[0]).closest("article");
+        card.classList.toggle("low", value <= 25);
+        card.classList.toggle("medium", value > 25 && value <= 55);
       });
     }
 
@@ -454,6 +500,37 @@
       }
     }
 
+    spawnHearts(count = 4) {
+      const host = this.dom.touchHearts;
+      if (!host) return;
+
+      for (let i = 0; i < count; i += 1) {
+        const heart = document.createElement("span");
+        heart.className = "touch-heart";
+        heart.style.left = `${45 + Math.random() * 18}%`;
+        heart.style.top = `${50 + Math.random() * 12}%`;
+        heart.style.setProperty("--drift", `${(Math.random() - .5) * 55}px`);
+        host.appendChild(heart);
+        window.setTimeout(() => heart.remove(), 1700);
+      }
+    }
+
+    spawnSleepZ() {
+      const host = this.dom.roomActionEffect;
+      if (!host) return;
+
+      [0, 650, 1300].forEach((delay, index) => {
+        window.setTimeout(() => {
+          const z = document.createElement("span");
+          z.className = "sleep-z";
+          z.textContent = "Z";
+          z.style.fontSize = `${20 + index * 7}px`;
+          host.appendChild(z);
+          window.setTimeout(() => z.remove(), 2500);
+        }, delay);
+      });
+    }
+
     showMessage(text) {
       window.clearTimeout(this.messageTimer);
       this.dom.message.textContent = text;
@@ -469,6 +546,11 @@
       this.dom.soundToggle.checked = settings.sound;
       this.dom.motionToggle.checked = settings.reducedMotion;
       this.character.setReducedMotion(settings.reducedMotion);
+      AudioEngine.setMusicEnabled(settings.music);
+      AudioEngine.setSfxEnabled(settings.sound);
+      AudioEngine.setEnabled(settings.music || settings.sound);
+      this.dom.soundButton.classList.toggle("muted", !(settings.music || settings.sound));
+      this.dom.soundButton.textContent = (settings.music || settings.sound) ? "♪" : "×";
     }
 
     updateSettings() {
@@ -478,6 +560,13 @@
         reducedMotion: this.dom.motionToggle.checked
       };
       this.character.setReducedMotion(this.save.settings.reducedMotion);
+      AudioEngine.setMusicEnabled(this.save.settings.music);
+      AudioEngine.setSfxEnabled(this.save.settings.sound);
+      AudioEngine.setEnabled(this.save.settings.music || this.save.settings.sound);
+      this.dom.soundButton.classList.toggle(
+        "muted",
+        !(this.save.settings.music || this.save.settings.sound)
+      );
       this.persist();
     }
 
