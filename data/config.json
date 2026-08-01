@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.8.5",
+  "version": "0.9.0",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -115,5 +115,14 @@
     "happyJumpAfterEating": true,
     "kitchenOnly": true,
     "interactionMode": "tap-select-second-touch-drag-or-tap-junior"
+  },
+  "fridgeModule": {
+    "file": "js/fridge.js",
+    "independentFromGameJs": true,
+    "opensFromKitchenButton": true,
+    "tapToSelect": true,
+    "secondTouchToDrag": true,
+    "tapJuniorToFeed": true,
+    "feedSelectedButton": true
   }
 }

@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.8.5
+## Versión 0.9.0
 
 Incluye:
 
@@ -199,3 +199,17 @@ El arrastre ahora funciona en dos pasos:
 - Alternativa: después de seleccionarlo, toca directamente a Junior para que lo coma.
 - El primer toque ya no bloquea el click de Android.
 - game.js fue validado con Node antes de crear el ZIP.
+
+
+## Refrigerador reconstruido 0.9.0
+
+El refrigerador fue retirado de `game.js` y reconstruido como módulo independiente:
+
+- Archivo nuevo: `js/fridge.js`.
+- Se abre únicamente desde el botón **Abrir refri** de la cocina.
+- Primer toque: selecciona el alimento.
+- Segundo toque: inicia el arrastre.
+- Alternativa segura: tocar a Junior o pulsar **Darle a Junior**.
+- Sonido al abrir, cerrar y comer.
+- Junior abre la boca, mastica, aumenta hambre y felicidad, y salta de emoción.
+- El sistema anterior fue eliminado para evitar conflictos.

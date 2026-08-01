@@ -8,9 +8,7 @@
       this.idleYawnTimer = null;
       this.messageTimer = null;
       this.tvOn = false;
-      this.draggedFood = null;
-      this.dragPointerId = null;
-      this.foodOrigin = null;
+      this.fridge = null;
 
       this.dom = {
         screens: [...document.querySelectorAll(".screen")],
@@ -40,16 +38,18 @@
         careAction: document.getElementById("careAction"),
         restAction: document.getElementById("restAction"),
         soundButton: document.getElementById("soundButton"),
-        touchHearts: document.getElementById("touchHearts"),
-        fridgeHotspot: document.getElementById("fridgeHotspot"),
-        fridgeInventory: document.getElementById("fridgeInventory"),
-        closeFridge: document.getElementById("closeFridge"),
-        mouthDropTarget: document.getElementById("mouthDropTarget")
+        touchHearts: document.getElementById("touchHearts")
       };
     }
 
     init() {
       this.character = new JuniorCharacter(document.getElementById("junior"));
+      this.fridge = new FridgeController({
+        game: this,
+        gameScreen: this.dom.gameScreen,
+        character: this.character
+      });
+
       this.character.onInteract = () => {
         this.changeNeed("happiness", 1);
         this.spawnHearts(4);
@@ -100,82 +100,6 @@
 
       document.querySelectorAll("[data-room]").forEach((button) => {
         button.addEventListener("click", () => this.changeRoom(button.dataset.room));
-      });
-
-      this.dom.fridgeHotspot?.addEventListener("click", async () => {
-        await AudioEngine.unlock();
-        this.openFridge();
-      });
-
-      this.dom.closeFridge?.addEventListener("click", () => this.closeFridge());
-
-      document.querySelectorAll(".food-item").forEach((item) => {
-        item.addEventListener("click", (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-
-          if (this.draggedFood) return;
-
-          if (this.selectedFood === item) {
-            this.showFoodSelectionMessage(
-              `Ahora mantén el dedo sobre ${item.dataset.name || "la comida"} y muévelo, o toca la boca de Junior.`
-            );
-          } else {
-            this.selectFood(item);
-          }
-        });
-
-        item.addEventListener("touchstart", (event) => {
-          if (this.selectedFood !== item) {
-            return;
-          }
-
-          const touch = event.touches[0];
-          if (!touch) return;
-
-          event.preventDefault();
-          event.stopPropagation();
-
-          this.beginFoodDrag(
-            item,
-            touch.identifier,
-            touch.clientX,
-            touch.clientY,
-            "touch"
-          );
-        }, { passive: false });
-
-        item.addEventListener("pointerdown", (event) => {
-          if (event.pointerType === "touch") return;
-          if (this.selectedFood !== item) return;
-
-          event.preventDefault();
-          event.stopPropagation();
-
-          this.beginFoodDrag(
-            item,
-            event.pointerId,
-            event.clientX,
-            event.clientY,
-            "pointer"
-          );
-        }, { passive: false });
-      });
-
-      this.character.element.addEventListener("click", (event) => {
-        if (!this.selectedFood) return;
-        if ((this.save.room || "living") !== "kitchen") return;
-        if (!this.dom.gameScreen.classList.contains("fridge-open")) return;
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        const item = this.selectedFood;
-        this.selectedFood = null;
-        item.classList.remove("food-selected");
-        this.character.element.classList.remove("food-target-ready");
-        this.hideFoodSelectionMessage();
-        this.feedDraggedFood(item);
       });
 
       document.querySelectorAll("[data-action]").forEach((button) => {
@@ -377,292 +301,11 @@
     }
 
     openFridge() {
-      if ((this.save.room || "living") !== "kitchen") {
-        this.showMessage("El refrigerador solo está disponible en la cocina.");
-        return;
-      }
-
-      this.dom.gameScreen.classList.add("fridge-open");
-      this.dom.fridgeInventory?.setAttribute("aria-hidden", "false");
-      AudioEngine.play("fridgeOpen");
-      this.character.setState("surprised", 700);
-      this.showMessage("Elige un alimento y arrástralo hasta la boca de Junior.");
+      this.fridge?.open();
     }
 
     closeFridge(playSound = true) {
-      this.clearFoodSelection();
-      if (!this.dom.gameScreen.classList.contains("fridge-open")) return;
-      this.dom.gameScreen.classList.remove("fridge-open");
-      this.dom.fridgeInventory?.setAttribute("aria-hidden", "true");
-      if (playSound) AudioEngine.play("fridgeClose");
-    }
-
-    selectFood(item) {
-      if ((this.save.room || "living") !== "kitchen") return;
-      if (!this.dom.gameScreen.classList.contains("fridge-open")) return;
-      if (item.classList.contains("food-used")) return;
-
-      this.clearFoodSelection();
-      this.selectedFood = item;
-      item.classList.add("food-selected");
-      this.character.element.classList.add("food-target-ready");
-
-      AudioEngine.play("tap");
-      this.character.setState("surprised", 650);
-      this.showFoodSelectionMessage(
-        `${item.dataset.name || "Comida"} seleccionada. Tócala otra vez y arrástrala, o toca directamente la boca de Junior.`
-      );
-    }
-
-    clearFoodSelection() {
-      document.querySelectorAll(".food-item.food-selected").forEach((food) => {
-        food.classList.remove("food-selected");
-      });
-      this.selectedFood = null;
-      this.character.element.classList.remove("food-target-ready");
-      this.hideFoodSelectionMessage();
-    }
-
-    showFoodSelectionMessage(text) {
-      this.hideFoodSelectionMessage();
-
-      const message = document.createElement("div");
-      message.className = "food-selection-message";
-      message.textContent = text;
-      document.body.appendChild(message);
-      this.selectionMessage = message;
-
-      window.clearTimeout(this.selectionMessageTimer);
-      this.selectionMessageTimer = window.setTimeout(() => {
-        this.hideFoodSelectionMessage();
-      }, 3600);
-    }
-
-    hideFoodSelectionMessage() {
-      this.selectionMessage?.remove();
-      this.selectionMessage = null;
-      window.clearTimeout(this.selectionMessageTimer);
-    }
-
-    beginFoodDrag(item, pointerId, x, y, mode) {
-      if ((this.save.room || "living") !== "kitchen") return;
-      if (!this.dom.gameScreen.classList.contains("fridge-open")) return;
-      if (item.classList.contains("food-used")) return;
-      if (this.draggedFood) return;
-      if (this.selectedFood !== item) {
-        this.selectFood(item);
-        return;
-      }
-
-      this.hideFoodSelectionMessage();
-      item.classList.remove("food-selected");
-
-      this.draggedFood = item;
-      this.dragPointerId = pointerId;
-      this.dragMode = mode;
-      this.lastDragX = x;
-      this.lastDragY = y;
-
-      item.classList.add("drag-source");
-
-      const clone = item.cloneNode(true);
-      clone.classList.remove("drag-source", "food-used");
-      clone.classList.add("food-drag-clone");
-      clone.removeAttribute("id");
-      document.body.appendChild(clone);
-      this.dragClone = clone;
-
-      document.body.classList.add("food-dragging");
-      this.showDragHint();
-      this.moveFoodClone(x, y);
-
-      if (mode === "touch") {
-        this.touchMoveHandler = (event) => {
-          const touch = [...event.touches].find(
-            (value) => value.identifier === this.dragPointerId
-          ) || event.touches[0];
-
-          if (!touch) return;
-          event.preventDefault();
-          event.stopPropagation();
-          this.moveFoodClone(touch.clientX, touch.clientY);
-        };
-
-        this.touchEndHandler = (event) => {
-          const touch = [...event.changedTouches].find(
-            (value) => value.identifier === this.dragPointerId
-          ) || event.changedTouches[0];
-
-          event.preventDefault();
-          event.stopPropagation();
-
-          this.finishFoodCloneDrag(
-            touch?.clientX ?? this.lastDragX,
-            touch?.clientY ?? this.lastDragY
-          );
-        };
-
-        // El movimiento de un toque continúa asociado al elemento original.
-        // Por eso se escucha en window, no en una capa creada después.
-        window.addEventListener("touchmove", this.touchMoveHandler, { passive: false, capture: true });
-        window.addEventListener("touchend", this.touchEndHandler, { passive: false, capture: true });
-        window.addEventListener("touchcancel", this.touchEndHandler, { passive: false, capture: true });
-      } else {
-        this.pointerMoveHandler = (event) => {
-          if (event.pointerId !== this.dragPointerId) return;
-          event.preventDefault();
-          this.moveFoodClone(event.clientX, event.clientY);
-        };
-
-        this.pointerEndHandler = (event) => {
-          if (event.pointerId !== this.dragPointerId) return;
-          event.preventDefault();
-          this.finishFoodCloneDrag(event.clientX, event.clientY);
-        };
-
-        window.addEventListener("pointermove", this.pointerMoveHandler, { passive: false, capture: true });
-        window.addEventListener("pointerup", this.pointerEndHandler, { passive: false, capture: true });
-        window.addEventListener("pointercancel", this.pointerEndHandler, { passive: false, capture: true });
-      }
-    }
-
-    moveFoodClone(x, y) {
-      if (!this.dragClone) return;
-
-      this.lastDragX = x;
-      this.lastDragY = y;
-
-      this.dragClone.style.left = `${x}px`;
-      this.dragClone.style.top = `${y}px`;
-
-      const juniorRect = this.character.element.getBoundingClientRect();
-      const mouthX = juniorRect.left + juniorRect.width * .5;
-      const mouthY = juniorRect.top + juniorRect.height * .625;
-      const distance = Math.hypot(x - mouthX, y - mouthY);
-
-      this.character.element.classList.toggle("food-near", distance < 135);
-
-      const dx = Math.max(-9, Math.min(9, (x - mouthX) / 18));
-      const dy = Math.max(-7, Math.min(7, (y - mouthY) / 22));
-      this.character.element.style.setProperty("--gaze-x", `${dx}px`);
-      this.character.element.style.setProperty("--gaze-y", `${dy}px`);
-
-      if (Math.random() < .22) this.spawnFoodTrail(x, y);
-    }
-
-    finishFoodCloneDrag(x, y) {
-      if (!this.draggedFood) return;
-
-      const item = this.draggedFood;
-      const juniorRect = this.character.element.getBoundingClientRect();
-      const mouthX = juniorRect.left + juniorRect.width * .5;
-      const mouthY = juniorRect.top + juniorRect.height * .625;
-      const distance = Math.hypot(x - mouthX, y - mouthY);
-
-      this.cleanupFoodDrag();
-
-      if (distance < 135) {
-        this.selectedFood = null;
-        this.feedDraggedFood(item);
-      } else {
-        this.selectedFood = item;
-        item.classList.add("food-selected");
-        this.showFoodSelectionMessage(
-          "No llegó a la boca. Vuelve a tocar el alimento seleccionado y arrástralo."
-        );
-      }
-    }
-
-    cleanupFoodDrag() {
-      this.draggedFood?.classList.remove("drag-source");
-      this.dragClone?.remove();
-
-      if (this.touchMoveHandler) {
-        window.removeEventListener("touchmove", this.touchMoveHandler, true);
-        window.removeEventListener("touchend", this.touchEndHandler, true);
-        window.removeEventListener("touchcancel", this.touchEndHandler, true);
-      }
-
-      if (this.pointerMoveHandler) {
-        window.removeEventListener("pointermove", this.pointerMoveHandler, true);
-        window.removeEventListener("pointerup", this.pointerEndHandler, true);
-        window.removeEventListener("pointercancel", this.pointerEndHandler, true);
-      }
-
-      document.body.classList.remove("food-dragging");
-      this.hideDragHint();
-
-      this.character.element.classList.remove("food-near");
-      this.character.element.style.setProperty("--gaze-x", "0px");
-      this.character.element.style.setProperty("--gaze-y", "0px");
-
-      this.draggedFood = null;
-      this.dragClone = null;
-      this.dragLayer = null;
-      this.dragPointerId = null;
-      this.dragMode = null;
-      this.selectedFood = null;
-      this.selectionMessage = null;
-      this.touchMoveHandler = null;
-      this.touchEndHandler = null;
-      this.pointerMoveHandler = null;
-      this.pointerEndHandler = null;
-    }
-
-    feedDraggedFood(item) {
-      this.clearFoodSelection();
-      const hunger = Number(item.dataset.hunger || 10);
-      const name = item.dataset.name || "comida";
-
-      item.classList.add("food-used");
-
-      this.character.element.classList.add("eating");
-      AudioEngine.play("bite");
-
-      window.setTimeout(() => {
-        this.changeNeed("hunger", hunger);
-        this.changeNeed("happiness", 8);
-        this.character.element.classList.remove("eating");
-        this.character.element.classList.add("food-celebration");
-        this.character.setState("happy", 1500);
-        AudioEngine.play("happy");
-        this.spawnStars(10);
-        this.spawnHearts(5);
-        this.renderNeeds();
-        this.persist();
-        this.showMessage(`Junior disfrutó la ${name}.`);
-
-        window.setTimeout(() => {
-          this.character.element.classList.remove("food-celebration");
-        }, 950);
-
-        window.setTimeout(() => {
-          item.classList.remove("food-used");
-        }, 7000);
-      }, 700);
-    }
-
-    showDragHint() {
-      this.hideDragHint();
-      const hint = document.createElement("div");
-      hint.className = "food-drag-hint";
-      hint.textContent = "Lleva la comida hasta la boca de Junior";
-      document.body.appendChild(hint);
-      this.dragHint = hint;
-    }
-
-    hideDragHint() {
-      this.dragHint?.remove();
-      this.dragHint = null;
-    }
-
-    spawnFoodTrail(x, y) {
-      const dot = document.createElement("span");
-      dot.className = "food-trail";
-      dot.style.left = `${x}px`;
-      dot.style.top = `${y}px`;
-      document.body.appendChild(dot);
-      window.setTimeout(() => dot.remove(), 550);
+      this.fridge?.close(playSound);
     }
 
     toggleTv() {
@@ -812,7 +455,7 @@
     changeRoom(room) {
       const rooms = ["living", "kitchen", "bathroom", "bedroom"];
       if (room !== "bedroom") AudioEngine.stopSnoring();
-      if (room !== "kitchen") this.closeFridge(false);
+      if (room !== "kitchen") this.fridge?.close(false);
       if (!rooms.includes(room)) return;
 
       this.dom.room?.classList.add("room-changing");
