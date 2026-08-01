@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.5.1
+## Versión 0.5.2
 
 Incluye:
 
@@ -83,3 +83,12 @@ Las cuatro habitaciones están construidas con objetos independientes y transici
 - Se eliminaron visualmente las versiones simplificadas anteriores.
 - Se conservaron logo, botones, distribución y funciones.
 - Junior respira, parpadea y mueve ligeramente la mirada en el menú.
+
+
+## Corrección 0.5.2
+
+- Se corrigió el Junior invisible del menú principal.
+- Cada copia del SVG ahora tiene identificadores internos únicos.
+- Se corrigieron conflictos de filtros y recortes en navegadores Android.
+- El personaje aparece en la pantalla de carga, el menú y la partida.
+- Se conservaron respiración, parpadeo y movimiento de mirada.

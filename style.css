@@ -912,3 +912,60 @@ linear-gradient(90deg,rgba(255,255,255,.14),transparent 35%,transparent 65%,rgba
     margin:-18px 0 -2px;
   }
 }
+
+
+/* ==========================================================
+   0.5.2 — CORRECCIÓN DE JUNIOR EN MENÚ Y CARGA
+   ========================================================== */
+
+.official-junior-preview{
+  z-index:2;
+  opacity:1!important;
+  visibility:visible!important;
+  overflow:visible;
+}
+
+.official-junior-preview .junior-svg{
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+  overflow:visible;
+}
+
+.official-junior-preview .vector-rig{
+  display:block;
+  opacity:1;
+  visibility:visible;
+  filter:drop-shadow(0 15px 12px rgba(0,0,0,.28));
+}
+
+.official-junior-menu{
+  min-height:205px;
+}
+
+.official-junior-loading{
+  min-height:143px;
+}
+
+/* Evita que las reglas del personaje de la partida oculten las copias del menú */
+.official-junior-preview .vector-body,
+.official-junior-preview .vector-ear,
+.official-junior-preview .head-stripe,
+.official-junior-preview .chest,
+.official-junior-preview .fur-stripes,
+.official-junior-preview .face,
+.official-junior-preview .muzzle-group{
+  opacity:1!important;
+  visibility:visible!important;
+}
+
+/* Animación estable para Android */
+.official-junior-preview .vector-rig{
+  transform-origin:300px 560px;
+  animation:previewBreathingFixed 4.4s ease-in-out infinite;
+}
+
+@keyframes previewBreathingFixed{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-2px) scale(1.008,.992)}
+}

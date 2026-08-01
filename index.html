@@ -18,52 +18,52 @@
       <div class="official-junior-preview official-junior-loading" aria-hidden="true">
         <svg class="junior-svg" viewBox="0 0 600 650" role="img" aria-label="Junior">
             <defs>
-              <linearGradient id="bodyGradient" x1="0" y1="0" x2="1" y2="1">
+              <linearGradient id="loading-bodyGradient" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stop-color="#e8a557"/>
                 <stop offset=".52" stop-color="#ca7735"/>
                 <stop offset="1" stop-color="#95471f"/>
               </linearGradient>
-              <linearGradient id="earGradient" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="loading-earGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stop-color="#c77a38"/>
                 <stop offset="1" stop-color="#88401d"/>
               </linearGradient>
-              <radialGradient id="chestGradient" cx=".45" cy=".2" r=".9">
+              <radialGradient id="loading-chestGradient" cx=".45" cy=".2" r=".9">
                 <stop offset="0" stop-color="#fff1cd"/>
                 <stop offset=".72" stop-color="#efd7aa"/>
                 <stop offset="1" stop-color="#d5b47c"/>
               </radialGradient>
-              <radialGradient id="noseGradient" cx=".35" cy=".22" r=".8">
+              <radialGradient id="loading-noseGradient" cx=".35" cy=".22" r=".8">
                 <stop offset="0" stop-color="#615951"/>
                 <stop offset=".45" stop-color="#2d2723"/>
                 <stop offset="1" stop-color="#110e0c"/>
               </radialGradient>
-              <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%">
+              <filter id="loading-softShadow" x="-30%" y="-30%" width="160%" height="180%">
                 <feDropShadow dx="0" dy="18" stdDeviation="12" flood-color="#2f1b11" flood-opacity=".32"/>
               </filter>
-              <filter id="innerSoft" x="-20%" y="-20%" width="140%" height="140%">
+              <filter id="loading-innerSoft" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="4"/>
               </filter>
-              <clipPath id="leftEyeClip">
+              <clipPath id="loading-leftEyeClip">
                 <ellipse cx="244" cy="264" rx="68" ry="83"/>
               </clipPath>
-              <clipPath id="rightEyeClip">
+              <clipPath id="loading-rightEyeClip">
                 <ellipse cx="356" cy="264" rx="68" ry="83"/>
               </clipPath>
             </defs>
 
             <ellipse class="vector-shadow" cx="300" cy="590" rx="218" ry="34"/>
 
-            <g class="vector-rig" filter="url(#softShadow)">
+            <g class="vector-rig">
               <g class="vector-ear vector-ear-left">
                 <path d="M174 178 C112 150 61 177 48 232 C36 282 55 330 97 342 C138 354 166 318 183 281 C198 247 211 198 174 178 Z"
-                      fill="url(#earGradient)" stroke="#462719" stroke-width="12" stroke-linejoin="round"/>
+                      fill="url(#loading-earGradient)" stroke="#462719" stroke-width="12" stroke-linejoin="round"/>
                 <path d="M156 197 C113 178 79 193 70 232 C62 265 77 295 105 303"
                       fill="none" stroke="#e69a51" stroke-opacity=".38" stroke-width="9" stroke-linecap="round"/>
               </g>
 
               <g class="vector-ear vector-ear-right">
                 <path d="M426 178 C488 150 539 177 552 232 C564 282 545 330 503 342 C462 354 434 318 417 281 C402 247 389 198 426 178 Z"
-                      fill="url(#earGradient)" stroke="#462719" stroke-width="12" stroke-linejoin="round"/>
+                      fill="url(#loading-earGradient)" stroke="#462719" stroke-width="12" stroke-linejoin="round"/>
                 <path d="M444 197 C487 178 521 193 530 232 C538 265 523 295 495 303"
                       fill="none" stroke="#e69a51" stroke-opacity=".38" stroke-width="9" stroke-linecap="round"/>
               </g>
@@ -76,7 +76,7 @@
                        C435 606 513 575 518 495
                        C523 420 502 332 480 250
                        C457 161 392 104 300 104 Z"
-                    fill="url(#bodyGradient)" stroke="#402418" stroke-width="13" stroke-linejoin="round"/>
+                    fill="url(#loading-bodyGradient)" stroke="#402418" stroke-width="13" stroke-linejoin="round"/>
 
               <path class="head-stripe"
                     d="M286 114 C294 106 306 106 314 114
@@ -91,7 +91,7 @@
                        C168 551 215 590 300 590
                        C385 590 432 551 420 475
                        C406 390 361 343 300 343 Z"
-                    fill="url(#chestGradient)"/>
+                    fill="url(#loading-chestGradient)"/>
 
               <g class="fur-stripes fur-stripes-left" opacity=".27" stroke="#73401f" stroke-width="12" stroke-linecap="round">
                 <path d="M126 360 L173 382"/>
@@ -107,7 +107,7 @@
               <g class="face">
                 <g class="vector-eye vector-eye-left">
                   <ellipse cx="244" cy="264" rx="68" ry="83" fill="#fffefb" stroke="#201915" stroke-width="11"/>
-                  <g clip-path="url(#leftEyeClip)">
+                  <g clip-path="url(#loading-leftEyeClip)">
                     <g class="vector-pupil vector-pupil-left">
                       <ellipse cx="244" cy="276" rx="24" ry="31" fill="#1b1714"/>
                       <ellipse cx="236" cy="264" rx="7" ry="9" fill="#ffffff" opacity=".72"/>
@@ -122,7 +122,7 @@
 
                 <g class="vector-eye vector-eye-right">
                   <ellipse cx="356" cy="264" rx="68" ry="83" fill="#fffefb" stroke="#201915" stroke-width="11"/>
-                  <g clip-path="url(#rightEyeClip)">
+                  <g clip-path="url(#loading-rightEyeClip)">
                     <g class="vector-pupil vector-pupil-right">
                       <ellipse cx="356" cy="276" rx="24" ry="31" fill="#1b1714"/>
                       <ellipse cx="348" cy="264" rx="7" ry="9" fill="#ffffff" opacity=".72"/>
@@ -142,7 +142,7 @@
 
                 <g class="muzzle-group">
                   <ellipse cx="300" cy="367" rx="104" ry="84" fill="#f3dfba" stroke="#9d6f3e" stroke-width="5"/>
-                  <ellipse class="vector-nose" cx="300" cy="335" rx="48" ry="38" fill="url(#noseGradient)" stroke="#211a16" stroke-width="7"/>
+                  <ellipse class="vector-nose" cx="300" cy="335" rx="48" ry="38" fill="url(#loading-noseGradient)" stroke="#211a16" stroke-width="7"/>
                   <ellipse cx="284" cy="323" rx="11" ry="7" fill="#ffffff" opacity=".13"/>
                   <path class="mouth-center" d="M300 370 L300 393" stroke="#3a2419" stroke-width="7" stroke-linecap="round"/>
                   <path class="vector-mouth vector-mouth-left" d="M300 393 C280 411 254 409 240 393"
@@ -172,52 +172,52 @@
         <div class="official-junior-preview official-junior-menu" aria-hidden="true">
           <svg class="junior-svg" viewBox="0 0 600 650" role="img" aria-label="Junior">
             <defs>
-              <linearGradient id="bodyGradient" x1="0" y1="0" x2="1" y2="1">
+              <linearGradient id="menu-bodyGradient" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0" stop-color="#e8a557"/>
                 <stop offset=".52" stop-color="#ca7735"/>
                 <stop offset="1" stop-color="#95471f"/>
               </linearGradient>
-              <linearGradient id="earGradient" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="menu-earGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stop-color="#c77a38"/>
                 <stop offset="1" stop-color="#88401d"/>
               </linearGradient>
-              <radialGradient id="chestGradient" cx=".45" cy=".2" r=".9">
+              <radialGradient id="menu-chestGradient" cx=".45" cy=".2" r=".9">
                 <stop offset="0" stop-color="#fff1cd"/>
                 <stop offset=".72" stop-color="#efd7aa"/>
                 <stop offset="1" stop-color="#d5b47c"/>
               </radialGradient>
-              <radialGradient id="noseGradient" cx=".35" cy=".22" r=".8">
+              <radialGradient id="menu-noseGradient" cx=".35" cy=".22" r=".8">
                 <stop offset="0" stop-color="#615951"/>
                 <stop offset=".45" stop-color="#2d2723"/>
                 <stop offset="1" stop-color="#110e0c"/>
               </radialGradient>
-              <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%">
+              <filter id="menu-softShadow" x="-30%" y="-30%" width="160%" height="180%">
                 <feDropShadow dx="0" dy="18" stdDeviation="12" flood-color="#2f1b11" flood-opacity=".32"/>
               </filter>
-              <filter id="innerSoft" x="-20%" y="-20%" width="140%" height="140%">
+              <filter id="menu-innerSoft" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="4"/>
               </filter>
-              <clipPath id="leftEyeClip">
+              <clipPath id="menu-leftEyeClip">
                 <ellipse cx="244" cy="264" rx="68" ry="83"/>
               </clipPath>
-              <clipPath id="rightEyeClip">
+              <clipPath id="menu-rightEyeClip">
                 <ellipse cx="356" cy="264" rx="68" ry="83"/>
               </clipPath>
             </defs>
 
             <ellipse class="vector-shadow" cx="300" cy="590" rx="218" ry="34"/>
 
-            <g class="vector-rig" filter="url(#softShadow)">
+            <g class="vector-rig">
               <g class="vector-ear vector-ear-left">
                 <path d="M174 178 C112 150 61 177 48 232 C36 282 55 330 97 342 C138 354 166 318 183 281 C198 247 211 198 174 178 Z"
-                      fill="url(#earGradient)" stroke="#462719" stroke-width="12" stroke-linejoin="round"/>
+                      fill="url(#menu-earGradient)" stroke="#462719" stroke-width="12" stroke-linejoin="round"/>
                 <path d="M156 197 C113 178 79 193 70 232 C62 265 77 295 105 303"
                       fill="none" stroke="#e69a51" stroke-opacity=".38" stroke-width="9" stroke-linecap="round"/>
               </g>
 
               <g class="vector-ear vector-ear-right">
                 <path d="M426 178 C488 150 539 177 552 232 C564 282 545 330 503 342 C462 354 434 318 417 281 C402 247 389 198 426 178 Z"
-                      fill="url(#earGradient)" stroke="#462719" stroke-width="12" stroke-linejoin="round"/>
+                      fill="url(#menu-earGradient)" stroke="#462719" stroke-width="12" stroke-linejoin="round"/>
                 <path d="M444 197 C487 178 521 193 530 232 C538 265 523 295 495 303"
                       fill="none" stroke="#e69a51" stroke-opacity=".38" stroke-width="9" stroke-linecap="round"/>
               </g>
@@ -230,7 +230,7 @@
                        C435 606 513 575 518 495
                        C523 420 502 332 480 250
                        C457 161 392 104 300 104 Z"
-                    fill="url(#bodyGradient)" stroke="#402418" stroke-width="13" stroke-linejoin="round"/>
+                    fill="url(#menu-bodyGradient)" stroke="#402418" stroke-width="13" stroke-linejoin="round"/>
 
               <path class="head-stripe"
                     d="M286 114 C294 106 306 106 314 114
@@ -245,7 +245,7 @@
                        C168 551 215 590 300 590
                        C385 590 432 551 420 475
                        C406 390 361 343 300 343 Z"
-                    fill="url(#chestGradient)"/>
+                    fill="url(#menu-chestGradient)"/>
 
               <g class="fur-stripes fur-stripes-left" opacity=".27" stroke="#73401f" stroke-width="12" stroke-linecap="round">
                 <path d="M126 360 L173 382"/>
@@ -261,7 +261,7 @@
               <g class="face">
                 <g class="vector-eye vector-eye-left">
                   <ellipse cx="244" cy="264" rx="68" ry="83" fill="#fffefb" stroke="#201915" stroke-width="11"/>
-                  <g clip-path="url(#leftEyeClip)">
+                  <g clip-path="url(#menu-leftEyeClip)">
                     <g class="vector-pupil vector-pupil-left">
                       <ellipse cx="244" cy="276" rx="24" ry="31" fill="#1b1714"/>
                       <ellipse cx="236" cy="264" rx="7" ry="9" fill="#ffffff" opacity=".72"/>
@@ -276,7 +276,7 @@
 
                 <g class="vector-eye vector-eye-right">
                   <ellipse cx="356" cy="264" rx="68" ry="83" fill="#fffefb" stroke="#201915" stroke-width="11"/>
-                  <g clip-path="url(#rightEyeClip)">
+                  <g clip-path="url(#menu-rightEyeClip)">
                     <g class="vector-pupil vector-pupil-right">
                       <ellipse cx="356" cy="276" rx="24" ry="31" fill="#1b1714"/>
                       <ellipse cx="348" cy="264" rx="7" ry="9" fill="#ffffff" opacity=".72"/>
@@ -296,7 +296,7 @@
 
                 <g class="muzzle-group">
                   <ellipse cx="300" cy="367" rx="104" ry="84" fill="#f3dfba" stroke="#9d6f3e" stroke-width="5"/>
-                  <ellipse class="vector-nose" cx="300" cy="335" rx="48" ry="38" fill="url(#noseGradient)" stroke="#211a16" stroke-width="7"/>
+                  <ellipse class="vector-nose" cx="300" cy="335" rx="48" ry="38" fill="url(#menu-noseGradient)" stroke="#211a16" stroke-width="7"/>
                   <ellipse cx="284" cy="323" rx="11" ry="7" fill="#ffffff" opacity=".13"/>
                   <path class="mouth-center" d="M300 370 L300 393" stroke="#3a2419" stroke-width="7" stroke-linecap="round"/>
                   <path class="vector-mouth vector-mouth-left" d="M300 393 C280 411 254 409 240 393"
@@ -313,7 +313,7 @@
         <button id="playBtn" class="btn primary">Jugar</button>
         <button id="continueBtn" class="btn secondary">Continuar</button>
         <button id="settingsBtn" class="btn secondary">Ajustes</button>
-        <small>Versión 0.5.1</small>
+        <small>Versión 0.5.2</small>
       </div>
     </section>
 
