@@ -8,6 +8,9 @@
       this.idleYawnTimer = null;
       this.messageTimer = null;
       this.tvOn = false;
+      this.draggedFood = null;
+      this.dragPointerId = null;
+      this.foodOrigin = null;
 
       this.dom = {
         screens: [...document.querySelectorAll(".screen")],
@@ -37,7 +40,11 @@
         careAction: document.getElementById("careAction"),
         restAction: document.getElementById("restAction"),
         soundButton: document.getElementById("soundButton"),
-        touchHearts: document.getElementById("touchHearts")
+        touchHearts: document.getElementById("touchHearts"),
+        fridgeHotspot: document.getElementById("fridgeHotspot"),
+        fridgeInventory: document.getElementById("fridgeInventory"),
+        closeFridge: document.getElementById("closeFridge"),
+        mouthDropTarget: document.getElementById("mouthDropTarget")
       };
     }
 
@@ -93,6 +100,17 @@
 
       document.querySelectorAll("[data-room]").forEach((button) => {
         button.addEventListener("click", () => this.changeRoom(button.dataset.room));
+      });
+
+      this.dom.fridgeHotspot?.addEventListener("click", async () => {
+        await AudioEngine.unlock();
+        this.openFridge();
+      });
+
+      this.dom.closeFridge?.addEventListener("click", () => this.closeFridge());
+
+      document.querySelectorAll(".food-item").forEach((item) => {
+        item.addEventListener("pointerdown", (event) => this.startFoodDrag(event, item));
       });
 
       document.querySelectorAll("[data-action]").forEach((button) => {
@@ -254,10 +272,10 @@
           rest: ["Descansar", () => this.restJunior()]
         },
         kitchen: {
-          primary: ["Dar comida", () => this.feedJunior()],
+          primary: ["Abrir refri", () => this.openFridge()],
           secondary: ["Dar agua", () => this.giveWater()],
           care: ["Cocinar", () => this.cookForJunior()],
-          rest: ["Probar fruta", () => this.giveFruit()]
+          rest: ["Cerrar refri", () => this.closeFridge()]
         },
         bathroom: {
           primary: ["Bañar", () => this.batheJunior()],
@@ -291,6 +309,168 @@
       this.renderEconomy();
       this.renderNeeds();
       this.persist();
+    }
+
+    openFridge() {
+      if ((this.save.room || "living") !== "kitchen") {
+        this.showMessage("El refrigerador solo está disponible en la cocina.");
+        return;
+      }
+
+      this.dom.gameScreen.classList.add("fridge-open");
+      this.dom.fridgeInventory?.setAttribute("aria-hidden", "false");
+      AudioEngine.play("fridgeOpen");
+      this.character.setState("surprised", 700);
+      this.showMessage("Elige un alimento y arrástralo hasta la boca de Junior.");
+    }
+
+    closeFridge(playSound = true) {
+      if (!this.dom.gameScreen.classList.contains("fridge-open")) return;
+      this.dom.gameScreen.classList.remove("fridge-open");
+      this.dom.fridgeInventory?.setAttribute("aria-hidden", "true");
+      if (playSound) AudioEngine.play("fridgeClose");
+    }
+
+    startFoodDrag(event, item) {
+      if ((this.save.room || "living") !== "kitchen") return;
+      if (!this.dom.gameScreen.classList.contains("fridge-open")) return;
+      if (item.classList.contains("food-used")) return;
+
+      event.preventDefault();
+      this.draggedFood = item;
+      this.dragPointerId = event.pointerId;
+      this.foodOrigin = {
+        parent: item.parentElement,
+        next: item.nextElementSibling
+      };
+
+      item.setPointerCapture?.(event.pointerId);
+      item.classList.add("dragging");
+      document.body.appendChild(item);
+      this.moveFood(event);
+
+      const move = (moveEvent) => {
+        if (moveEvent.pointerId !== this.dragPointerId) return;
+        this.moveFood(moveEvent);
+      };
+
+      const end = (endEvent) => {
+        if (endEvent.pointerId !== this.dragPointerId) return;
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", end);
+        window.removeEventListener("pointercancel", end);
+        this.finishFoodDrag(endEvent);
+      };
+
+      window.addEventListener("pointermove", move, { passive: false });
+      window.addEventListener("pointerup", end);
+      window.addEventListener("pointercancel", end);
+    }
+
+    moveFood(event) {
+      if (!this.draggedFood) return;
+      event.preventDefault?.();
+
+      this.draggedFood.style.left = `${event.clientX}px`;
+      this.draggedFood.style.top = `${event.clientY}px`;
+
+      const juniorRect = this.character.element.getBoundingClientRect();
+      const mouthX = juniorRect.left + juniorRect.width * .5;
+      const mouthY = juniorRect.top + juniorRect.height * .625;
+      const distance = Math.hypot(event.clientX - mouthX, event.clientY - mouthY);
+
+      this.character.element.classList.toggle("food-near", distance < 115);
+
+      const dx = Math.max(-9, Math.min(9, (event.clientX - mouthX) / 18));
+      const dy = Math.max(-7, Math.min(7, (event.clientY - mouthY) / 22));
+      this.character.element.style.setProperty("--gaze-x", `${dx}px`);
+      this.character.element.style.setProperty("--gaze-y", `${dy}px`);
+
+      if (Math.random() < .32) this.spawnFoodTrail(event.clientX, event.clientY);
+    }
+
+    finishFoodDrag(event) {
+      if (!this.draggedFood) return;
+
+      const item = this.draggedFood;
+      const juniorRect = this.character.element.getBoundingClientRect();
+      const mouthX = juniorRect.left + juniorRect.width * .5;
+      const mouthY = juniorRect.top + juniorRect.height * .625;
+      const distance = Math.hypot(event.clientX - mouthX, event.clientY - mouthY);
+
+      this.character.element.classList.remove("food-near");
+      this.character.element.style.setProperty("--gaze-x", "0px");
+      this.character.element.style.setProperty("--gaze-y", "0px");
+
+      if (distance < 105) {
+        this.feedDraggedFood(item);
+      } else {
+        this.restoreFood(item);
+      }
+
+      this.draggedFood = null;
+      this.dragPointerId = null;
+    }
+
+    restoreFood(item) {
+      item.classList.remove("dragging");
+      item.removeAttribute("style");
+
+      if (this.foodOrigin?.next) {
+        this.foodOrigin.parent.insertBefore(item, this.foodOrigin.next);
+      } else {
+        this.foodOrigin?.parent?.appendChild(item);
+      }
+    }
+
+    feedDraggedFood(item) {
+      const hunger = Number(item.dataset.hunger || 10);
+      const name = item.dataset.name || "comida";
+
+      item.classList.remove("dragging");
+      item.style.left = "50%";
+      item.style.top = "62%";
+      item.style.transition = "transform .22s ease,opacity .22s ease";
+      item.style.transform = "translate(-50%,-50%) scale(.45)";
+      item.style.opacity = "0";
+
+      this.character.element.classList.add("eating");
+      AudioEngine.play("bite");
+
+      window.setTimeout(() => {
+        item.removeAttribute("style");
+        item.classList.add("food-used");
+        this.foodOrigin?.parent?.appendChild(item);
+
+        this.changeNeed("hunger", hunger);
+        this.changeNeed("happiness", 8);
+        this.character.element.classList.remove("eating");
+        this.character.element.classList.add("food-celebration");
+        this.character.setState("happy", 1500);
+        AudioEngine.play("happy");
+        this.spawnStars(10);
+        this.spawnHearts(5);
+        this.renderNeeds();
+        this.persist();
+        this.showMessage(`Junior disfrutó la ${name}.`);
+
+        window.setTimeout(() => {
+          this.character.element.classList.remove("food-celebration");
+        }, 950);
+
+        window.setTimeout(() => {
+          item.classList.remove("food-used");
+        }, 7000);
+      }, 700);
+    }
+
+    spawnFoodTrail(x, y) {
+      const dot = document.createElement("span");
+      dot.className = "food-trail";
+      dot.style.left = `${x}px`;
+      dot.style.top = `${y}px`;
+      document.body.appendChild(dot);
+      window.setTimeout(() => dot.remove(), 550);
     }
 
     toggleTv() {
@@ -327,6 +507,10 @@
     }
 
     feedJunior() {
+      if ((this.save.room || "living") !== "kitchen") {
+        this.showMessage("Solo puedes dar comida dentro de la cocina.");
+        return;
+      }
       if (this.save.coins < 5) {
         this.showMessage("No tienes suficientes monedas.");
         return;
@@ -436,6 +620,7 @@
     changeRoom(room) {
       const rooms = ["living", "kitchen", "bathroom", "bedroom"];
       if (room !== "bedroom") AudioEngine.stopSnoring();
+      if (room !== "kitchen") this.closeFridge(false);
       if (!rooms.includes(room)) return;
 
       this.dom.room?.classList.add("room-changing");

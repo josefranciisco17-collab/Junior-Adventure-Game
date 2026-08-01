@@ -2,7 +2,7 @@
 
 Primera base funcional del nuevo juego de mascota virtual.
 
-## Versión 0.7.1
+## Versión 0.8.0
 
 Incluye:
 
@@ -133,3 +133,16 @@ Nota: los navegadores móviles exigen tocar la pantalla una vez para permitir el
 - La música comienza al pulsar Jugar o Continuar.
 - El botón de sonido queda visible junto al botón del menú.
 - Se incrementó el volumen general de música y efectos.
+
+
+## Refrigerador interactivo 0.8.0
+
+- El refrigerador se abre dentro de la cocina.
+- Aparecen manzana, plátano, pollo, galleta de hueso, zanahoria y pastel.
+- Los alimentos se arrastran con el dedo.
+- Junior sigue la comida con la mirada.
+- Abre la boca cuando el alimento se acerca.
+- Al soltarlo en su boca, mastica con sonido.
+- La barra de hambre aumenta según el alimento.
+- Junior muestra felicidad y salta después de comer.
+- Los controles de alimentación funcionan únicamente en la cocina.

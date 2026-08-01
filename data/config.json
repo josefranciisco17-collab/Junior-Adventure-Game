@@ -1,6 +1,6 @@
 {
   "name": "Junior Pocket Adventure",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "character": {
     "type": "inline-svg",
     "parts": [
@@ -77,5 +77,22 @@
     "louderAudio": true,
     "snoringLoop": true,
     "soundButtonAlwaysVisible": true
+  },
+  "kitchenFeeding": {
+    "interactiveFridge": true,
+    "dragAndDropFood": true,
+    "foods": [
+      "apple",
+      "banana",
+      "chicken",
+      "bone",
+      "carrot",
+      "cake"
+    ],
+    "eyeTrackingFood": true,
+    "mouthOpensNearFood": true,
+    "chewingSound": true,
+    "happyJumpAfterEating": true,
+    "kitchenOnly": true
   }
 }

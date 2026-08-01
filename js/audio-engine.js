@@ -184,6 +184,18 @@
         pet: () => {
           this.tone(660, .13, { volume: .08 });
           window.setTimeout(() => this.tone(780, .15, { volume: .07 }), 80);
+        },
+        fridgeOpen: () => {
+          this.tone(190, .18, { type: "triangle", volume: .13, endFrequency: 260 });
+          window.setTimeout(() => this.tone(480, .12, { volume: .08 }), 120);
+        },
+        fridgeClose: () => {
+          this.tone(230, .16, { type: "triangle", volume: .11, endFrequency: 150 });
+        },
+        bite: () => {
+          this.noise(.14, .13, 1150);
+          window.setTimeout(() => this.noise(.11, .11, 900), 150);
+          window.setTimeout(() => this.noise(.1, .1, 760), 295);
         }
       };
 
