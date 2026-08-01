@@ -1,4 +1,4 @@
-# Junior Adventure Game v0.1.0
+# Junior Adventure Game v0.1.1
 
 Base funcional inicial con HTML5 Canvas.
 
@@ -9,7 +9,7 @@ La animación actual usa una sola pose con rebote, inclinación y squash/stretch
 ## Probar en Termux
 
 ```bash
-cd ~/Junior-Adventure-Game-v0.1.0
+cd ~/Junior-Adventure-Game-v0.1.1
 python -m http.server 8080
 ```
 
@@ -22,3 +22,11 @@ git add -A
 git commit -m "Primera base funcional de Junior Adventure"
 git push origin main
 ```
+
+
+## Corrección v0.1.1
+
+- Ya no aparece el menú “Copiar / Compartir / Seleccionar todo”.
+- Se puede mantener presionado izquierda o derecha sin activar selección de texto.
+- Los botones liberan correctamente la acción al soltar, cancelar o cambiar de pestaña.
+- Se bloqueó el arrastre accidental y el menú contextual en Android/iOS.

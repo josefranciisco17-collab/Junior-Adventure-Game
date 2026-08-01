@@ -1,1 +1,38 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#06162a;font-family:system-ui}canvas{display:block;width:100%;height:100%}#hud{position:fixed;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;display:flex;gap:8px;z-index:5;color:#fff;font-size:20px;font-weight:800}#hud span,#hud button{background:linear-gradient(#164f7b,#082841);border:2px solid #3f86b7;border-radius:15px;padding:9px 14px;color:#fff;box-shadow:0 5px #03111f}#hud #lives{margin-left:auto}#start{position:fixed;inset:0;z-index:10;display:grid;place-content:center;text-align:center;background:linear-gradient(#06213edd,#06101bee);color:#fff}#start h1{font-size:clamp(48px,12vw,86px);line-height:.75;color:#ffc128;text-shadow:0 5px #764000;margin:0}#start small{display:block;font-size:.48em;color:white;margin-top:18px}#start button{border:0;border-radius:18px;padding:15px 42px;font-size:25px;font-weight:900;color:white;background:linear-gradient(#7ddd45,#339a1d);box-shadow:0 7px #1b5d10}#controls{position:fixed;z-index:5;left:18px;right:18px;bottom:max(16px,env(safe-area-inset-bottom));display:flex;justify-content:space-between;pointer-events:none}#controls div{display:flex;gap:14px;align-items:end}#controls button{pointer-events:auto;width:74px;height:74px;border-radius:50%;border:4px solid #ddd;background:linear-gradient(#7b8385,#343b3e);color:white;font-size:31px;font-weight:900;box-shadow:0 7px #171b1e;touch-action:none}#controls .power{width:62px;height:62px;border-color:#f3d467}body:not(.playing) #hud,body:not(.playing) #controls{display:none}
+
+
+/* v0.1.1 — corrección para mantener presionados los controles en Android/iOS */
+html,
+body,
+canvas,
+button,
+#controls,
+#controls *,
+#hud,
+#hud * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-user-drag: none !important;
+}
+
+html,
+body,
+canvas,
+#controls {
+  touch-action: none !important;
+  overscroll-behavior: none;
+}
+
+#controls button {
+  touch-action: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+#controls button.pressed {
+  transform: translateY(4px) scale(.97);
+  box-shadow: 0 3px #171b1e;
+}
